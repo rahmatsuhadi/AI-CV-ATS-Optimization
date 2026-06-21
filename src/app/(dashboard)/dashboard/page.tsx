@@ -12,11 +12,9 @@ import { CvCard } from "@/components/molecules/CvCard";
 import { JobRow } from "@/components/molecules/JobRow";
 import { StatCard } from "@/components/molecules/StatCard";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
 
 export default function DashboardPage() {
-  const { user } = useAuth();
-  const hasBaseCv = user?.hasBaseCv;
+  const hasBaseCv = true; // Temporary mock until we fetch DB state in Server Component
 
   const MOCK_STATS = [
     {

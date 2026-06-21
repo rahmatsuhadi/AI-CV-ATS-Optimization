@@ -1,13 +1,9 @@
-"use client";
-
 import { ArrowRightIcon, PlusIcon, UploadIcon } from "lucide-react";
+import Link from "next/link";
 import { Logo } from "@/components/atoms/Logo";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
 
 export default function SetupPage() {
-  const { setHasBaseCv, skipOnboarding } = useAuth();
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
       <div className="mb-12">
@@ -25,9 +21,8 @@ export default function SetupPage() {
         </p>
 
         <div className="mt-8 grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-          <button
-            type="button"
-            onClick={() => setHasBaseCv(true)}
+          <Link
+            href="/dashboard"
             className="group flex flex-col items-center gap-4 rounded-2xl border border-border/60 bg-card p-8 text-center shadow-sm transition-all hover:border-primary/50 hover:shadow-md"
           >
             <div className="flex size-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
@@ -41,11 +36,10 @@ export default function SetupPage() {
                 We&apos;ll parse it into structured data
               </span>
             </div>
-          </button>
+          </Link>
 
-          <button
-            type="button"
-            onClick={() => setHasBaseCv(true)}
+          <Link
+            href="/dashboard"
             className="group flex flex-col items-center gap-4 rounded-2xl border border-border/60 bg-card p-8 text-center shadow-sm transition-all hover:border-primary/50 hover:shadow-md"
           >
             <div className="flex size-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
@@ -59,16 +53,18 @@ export default function SetupPage() {
                 Use our guided forms
               </span>
             </div>
-          </button>
+          </Link>
         </div>
 
         <Button
           variant="ghost"
           className="mt-8 text-muted-foreground hover:text-foreground"
-          onClick={skipOnboarding}
+          asChild
         >
-          Skip for now (Features will be limited)
-          <ArrowRightIcon className="ml-2 size-4" />
+          <Link href="/dashboard">
+            Skip for now (Features will be limited)
+            <ArrowRightIcon className="ml-2 size-4" />
+          </Link>
         </Button>
       </div>
     </div>

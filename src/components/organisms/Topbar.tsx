@@ -1,10 +1,16 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { logout } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
 
-export function Topbar() {
-  const { user, logout } = useAuth();
+export function Topbar({ userEmail }: { userEmail?: string }) {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/login");
+  };
 
   return (
     <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between border-b border-border/60 bg-background/80 px-6 backdrop-blur-xl">
@@ -14,18 +20,18 @@ export function Topbar() {
         </span>
       </div>
       <div className="flex items-center gap-4">
-        {user && (
+        {userEmail && (
           <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/30 px-3 py-1">
-            <span className="size-1.5 rounded-full bg-success" />
+            <span className="size-1.5 rounded-full bg-success animate-pulse" />
             <span className="font-mono text-[11px] font-medium tracking-tight text-muted-foreground">
-              {user.email}
+              {userEmail}
             </span>
           </div>
         )}
         <Button
           variant="ghost"
           size="sm"
-          onClick={logout}
+          onClick={handleLogout}
           className="text-xs hover:bg-danger/10 hover:text-danger"
         >
           Logout

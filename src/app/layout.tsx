@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/components/atoms/Providers";
 import { cn } from "@/lib/utils";
 
 const bricolage = Bricolage_Grotesque({
@@ -53,7 +52,7 @@ export default function RootLayout({
               "url('https://grainy-gradients.vercel.app/noise.svg')",
           }}
         ></div>
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   );

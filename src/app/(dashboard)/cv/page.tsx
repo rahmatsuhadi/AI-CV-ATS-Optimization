@@ -4,12 +4,11 @@ import { PlusIcon, UploadIcon } from "lucide-react";
 import { SectionHeader } from "@/components/atoms/SectionHeader";
 import { CvCard } from "@/components/molecules/CvCard";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
 
 export default function CvPage() {
-  const { user, setHasBaseCv } = useAuth();
+  const hasBaseCv = true; // Temporary mock until DB state is connected
 
-  const MOCK_CVS = user?.hasBaseCv
+  const MOCK_CVS = hasBaseCv
     ? [
         {
           id: "1",
@@ -33,15 +32,11 @@ export default function CvPage() {
         subtitle="Upload or create a new CV to get started."
         action={
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setHasBaseCv(true)}
-            >
+            <Button variant="outline" size="sm">
               <UploadIcon className="mr-2 size-4" />
               Upload CV
             </Button>
-            <Button size="sm" onClick={() => setHasBaseCv(true)}>
+            <Button size="sm">
               <PlusIcon className="mr-2 size-4" />
               Build from Scratch
             </Button>
@@ -67,11 +62,7 @@ export default function CvPage() {
             Get started by uploading your existing resume or creating one from
             scratch to unlock AI tailoring.
           </p>
-          <Button
-            size="sm"
-            className="mt-6 rounded-xl shadow-md"
-            onClick={() => setHasBaseCv(true)}
-          >
+          <Button size="sm" className="mt-6 rounded-xl shadow-md">
             <PlusIcon className="mr-2 size-4" />
             Upload First CV
           </Button>
