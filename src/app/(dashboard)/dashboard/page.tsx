@@ -17,6 +17,10 @@ interface DashboardCv {
   name: string;
   is_base: boolean;
   updated_at: string;
+  jobs?: {
+    company_name: string;
+    position: string;
+  } | null;
 }
 
 export default async function DashboardPage() {
@@ -65,11 +69,17 @@ export default async function DashboardPage() {
         ? "Baru saja diperbarui"
         : `Diperbarui ${diffDays} hari lalu`;
 
+    const jobInfo = Array.isArray(cv.jobs) ? cv.jobs[0] : cv.jobs;
+    const companyName = jobInfo?.company_name;
+    const position = jobInfo?.position;
+
     return {
       id: cv.id,
       name: cv.name + (cv.is_base ? " (Base)" : ""),
       score: undefined, // base CV doesn't have a specific job matching score
       updatedAt: formattedDate,
+      companyName,
+      position,
     };
   });
 

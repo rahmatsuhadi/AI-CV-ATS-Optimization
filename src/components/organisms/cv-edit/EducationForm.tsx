@@ -3,7 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import type { CvFormContextType } from "@/hooks/useCvForm";
 import { useCvFormContext } from "@/hooks/useCvForm";
+import { cn } from "@/lib/utils";
+
+interface ExtendedCvFormContext {
+  activeHighlight?: string | null;
+}
 
 export function EducationForm() {
   const {
@@ -14,13 +20,19 @@ export function EducationForm() {
     addEducationBullet,
     updateEducationBullet,
     removeEducationBullet,
-  } = useCvFormContext();
+    activeHighlight,
+  } = useCvFormContext() as CvFormContextType & ExtendedCvFormContext;
+
   return (
-    <div className="mt-6 flex flex-col gap-6">
+    <div id="education" className="mt-6 flex flex-col gap-6">
       {educations.map((edu, index) => (
         <div
           key={edu.id}
-          className="flex flex-col gap-4 rounded-xl border bg-card p-6 relative"
+          className={cn(
+            "flex flex-col gap-4 rounded-xl border bg-card p-6 relative transition-all",
+            activeHighlight === "education" &&
+              "ring-2 ring-primary ring-offset-2 border-primary",
+          )}
         >
           <Button
             type="button"

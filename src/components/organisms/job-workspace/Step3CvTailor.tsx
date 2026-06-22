@@ -1,12 +1,15 @@
 import {
   AlertTriangleIcon,
   ArrowRightIcon,
+  CheckIcon,
   CircleIcon,
   Loader2Icon,
   SaveIcon,
   ScanSearchIcon,
 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
+import { applyCvSuggestion } from "@/actions/job";
 import { ScoreRing } from "@/components/atoms/ScoreRing";
 import { EducationForm } from "@/components/organisms/cv-edit/EducationForm";
 import { ExperienceForm } from "@/components/organisms/cv-edit/ExperienceForm";
@@ -14,9 +17,19 @@ import { ExperienceForm } from "@/components/organisms/cv-edit/ExperienceForm";
 import { PersonalForm } from "@/components/organisms/cv-edit/PersonalForm";
 import { SkillsOthersForm } from "@/components/organisms/cv-edit/SkillsOthersForm";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCvFormContext } from "@/hooks/useCvForm";
 import { cn } from "@/lib/utils";
+import { DiffViewer } from "./DiffViewer";
 
 interface Suggestion {
   field: string;
@@ -66,6 +79,148 @@ export function Step3CvTailor({
   handleRunAnalysis,
   handleNext,
 }: Step3CvTailorProps) {
+  const [applyingKey, setApplyingKey] = useState<string | null>(null);
+
+  const {
+    personal,
+    setPersonal,
+    experiences,
+    setExperiences,
+    educations,
+    setEducations,
+    skillsAchievements,
+    setSkillsAchievements,
+  } = useCvFormContext();
+
+  const handleSelectSuggestion = (s: Suggestion) => {
+    setActiveHighlight(s.field);
+    setActiveCvTab(s.tab);
+    toast.info(`Fokus diarahkan ke tab: ${s.tab.toUpperCase()}`);
+    setTimeout(() => {
+      const element = document.getElementById(s.field);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+          (element as HTMLElement).focus();
+        }
+      }
+    }, 100);
+  };
+
+  const [diffPreview, setDiffPreview] = useState<{
+    suggestion: Suggestion;
+    oldData: unknown;
+    newData: unknown;
+    rawNewObject: unknown;
+  } | null>(null);
+
+  const [appliedSuggestions, setAppliedSuggestions] = useState<string[]>([]);
+
+  const handleApplySuggestion = async (s: Suggestion) => {
+    const key = s.field + s.fix;
+    setApplyingKey(key);
+    const toastId = toast.loading("Menganalisis perbaikan dengan AI...");
+
+    try {
+      let currentData: unknown = null;
+
+      if (s.tab === "personal") {
+        currentData = { text: personal.summary || "" };
+      } else if (s.tab === "experience") {
+        const match = s.field.match(/experience-(\d+)/);
+        const idx = match ? Number.parseInt(match[1], 10) - 1 : 0;
+        currentData = experiences[idx] || {
+          company: "",
+          location: "",
+          position: "",
+          duration: "",
+          bullets: [],
+        };
+      } else if (s.tab === "education") {
+        currentData = educations[0] || {
+          institution: "",
+          degree: "",
+          duration: "",
+          bullets: [],
+        };
+      } else if (s.tab === "skills-others") {
+        currentData = skillsAchievements;
+      }
+
+      const res = await applyCvSuggestion(
+        s.tab,
+        s.field,
+        currentData,
+        s.fix,
+        s.issue,
+      );
+
+      toast.dismiss(toastId);
+
+      if (res.success && res.data) {
+        setDiffPreview({
+          suggestion: s,
+          oldData: currentData,
+          newData: res.data,
+          rawNewObject: res.data,
+        });
+      } else {
+        toast.error(res.error || "Gagal menerapkan saran perbaikan.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.dismiss(toastId);
+      toast.error("Terjadi kesalahan saat menerapkan saran.");
+    } finally {
+      setApplyingKey(null);
+    }
+  };
+
+  const handleConfirmRevision = () => {
+    if (!diffPreview) return;
+    const { suggestion, rawNewObject } = diffPreview;
+
+    if (suggestion.tab === "personal") {
+      const data = rawNewObject as { text?: string };
+      setPersonal((prev) => ({ ...prev, summary: data.text || "" }));
+      toast.success("Ringkasan Profesional berhasil diperbarui!");
+    } else if (suggestion.tab === "experience") {
+      const match = suggestion.field.match(/experience-(\d+)/);
+      const idx = match ? Number.parseInt(match[1], 10) - 1 : 0;
+      setExperiences((prev) => {
+        const updated = [...prev];
+        if (idx >= updated.length) {
+          updated.push(rawNewObject as (typeof experiences)[number]);
+        } else {
+          updated[idx] = rawNewObject as (typeof experiences)[number];
+        }
+        return updated;
+      });
+      toast.success("Pengalaman Kerja berhasil disesuaikan!");
+    } else if (suggestion.tab === "education") {
+      setEducations((prev) => {
+        const updated = [...prev];
+        if (updated.length === 0) {
+          updated.push(rawNewObject as (typeof educations)[number]);
+        } else {
+          updated[0] = rawNewObject as (typeof educations)[number];
+        }
+        return updated;
+      });
+      toast.success("Pendidikan berhasil disesuaikan!");
+    } else if (suggestion.tab === "skills-others") {
+      setSkillsAchievements(rawNewObject as typeof skillsAchievements);
+      toast.success("Keahlian & Prestasi berhasil disesuaikan!");
+    }
+
+    const key = suggestion.field + suggestion.fix;
+    setAppliedSuggestions((prev) => [...prev, key]);
+    setDiffPreview(null);
+  };
+
   // If analysis is not yet triggered, show only the "Analyze & Match" button card
   if (!matchCalculated) {
     return (
@@ -205,18 +360,20 @@ export function Step3CvTailor({
 
             <div className="flex flex-col gap-2.5 max-h-[300px] overflow-y-auto pr-1">
               {suggestions.map((s) => (
-                <button
-                  type="button"
+                // biome-ignore lint/a11y/useSemanticElements: using a div with role="button" because nesting <button> (Setuju) inside a <button> is invalid HTML.
+                <div
                   key={s.field + s.fix}
-                  onClick={() => {
-                    setActiveHighlight(s.field);
-                    setActiveCvTab(s.tab);
-                    toast.info(
-                      `Fokus diarahkan ke tab: ${s.tab.toUpperCase()}`,
-                    );
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleSelectSuggestion(s)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSelectSuggestion(s);
+                    }
                   }}
                   className={cn(
-                    "cursor-pointer flex flex-col gap-2 rounded-xl border p-4 transition-all text-left w-full",
+                    "cursor-pointer flex flex-col gap-2 rounded-xl border p-4 transition-all text-left w-full focus:outline-none focus:ring-2 focus:ring-primary/50",
                     activeHighlight === s.field
                       ? "border-primary bg-primary/5 ring-1 ring-primary"
                       : "border-border/60 bg-muted/20 hover:bg-muted/50",
@@ -239,7 +396,49 @@ export function Step3CvTailor({
                     <CircleIcon className="mt-1 size-2 shrink-0 text-primary fill-primary/30" />
                     <span className="italic">{s.fix}</span>
                   </div>
-                </button>
+                  <div className="mt-2.5 flex justify-end">
+                    <Button
+                      size="sm"
+                      variant={
+                        appliedSuggestions.includes(s.field + s.fix)
+                          ? "ghost"
+                          : activeHighlight === s.field
+                            ? "default"
+                            : "outline"
+                      }
+                      disabled={
+                        applyingKey !== null ||
+                        appliedSuggestions.includes(s.field + s.fix)
+                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleApplySuggestion(s);
+                      }}
+                      className={cn(
+                        "h-7 rounded-lg text-[11px] font-semibold px-3 py-1 shadow-sm cursor-pointer transition-all",
+                        appliedSuggestions.includes(s.field + s.fix) &&
+                          "bg-green-500/10 text-green-700 dark:text-green-400 border border-green-500/20 hover:bg-green-500/10",
+                      )}
+                    >
+                      {applyingKey === s.field + s.fix ? (
+                        <>
+                          <Loader2Icon className="mr-1.5 size-3 animate-spin" />
+                          Menerapkan...
+                        </>
+                      ) : appliedSuggestions.includes(s.field + s.fix) ? (
+                        <>
+                          <CheckIcon className="mr-1.5 size-3" />
+                          Sudah Disetujui
+                        </>
+                      ) : (
+                        <>
+                          <CheckIcon className="mr-1.5 size-3" />
+                          Setuju
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -282,7 +481,7 @@ export function Step3CvTailor({
             onValueChange={setActiveCvTab}
             className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto p-1 bg-muted/40 rounded-xl border border-border/60">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1 h-12">
               <TabsTrigger
                 value="personal"
                 className="rounded-lg py-2 text-xs font-medium"
@@ -318,7 +517,7 @@ export function Step3CvTailor({
                   "ring-2 ring-primary ring-offset-2 border-primary",
               )}
             >
-              <PersonalForm />
+              <PersonalForm hideIsBase />
             </TabsContent>
 
             <TabsContent
@@ -361,6 +560,64 @@ export function Step3CvTailor({
           </Button>
         </div>
       </div>
+
+      {/* Dialog Preview Perubahan (GitHub-Style Diff) */}
+      <Dialog
+        open={diffPreview !== null}
+        onOpenChange={(open) => {
+          if (!open) setDiffPreview(null);
+        }}
+      >
+        <DialogContent className="sm:max-w-2xl max-h-[85vh] flex flex-col p-6 rounded-2xl">
+          <DialogHeader className="gap-1">
+            <DialogTitle className="text-lg font-bold">
+              Pratinjau Perubahan CV
+            </DialogTitle>
+            <DialogDescription className="text-xs">
+              Tinjau revisi otomatis dari AI untuk menyelaraskan CV dengan
+              persyaratan lowongan.
+            </DialogDescription>
+          </DialogHeader>
+
+          {diffPreview && (
+            <div className="flex flex-col gap-4 overflow-y-auto pr-1 my-3">
+              <div className="flex flex-col gap-1 border border-border/40 p-3.5 rounded-xl bg-primary/5">
+                <span className="text-[11px] font-bold text-primary uppercase tracking-wider">
+                  Saran yang Disetujui:
+                </span>
+                <p className="text-sm font-semibold text-foreground">
+                  {diffPreview.suggestion.issue}
+                </p>
+                <p className="text-xs text-muted-foreground italic mt-0.5">
+                  Tindakan: {diffPreview.suggestion.fix}
+                </p>
+              </div>
+
+              <DiffViewer
+                tab={diffPreview.suggestion.tab}
+                oldVal={diffPreview.oldData}
+                newVal={diffPreview.newData}
+              />
+            </div>
+          )}
+
+          <DialogFooter className="gap-2 pt-2 border-t border-border/40">
+            <Button
+              variant="outline"
+              onClick={() => setDiffPreview(null)}
+              className="rounded-xl px-4 text-xs font-semibold cursor-pointer"
+            >
+              Batal
+            </Button>
+            <Button
+              onClick={handleConfirmRevision}
+              className="rounded-xl px-5 text-xs font-semibold bg-primary hover:bg-primary/95 text-primary-foreground cursor-pointer"
+            >
+              Terapkan Perubahan
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

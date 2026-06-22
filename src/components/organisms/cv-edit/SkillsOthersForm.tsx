@@ -10,7 +10,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import type { CvFormContextType } from "@/hooks/useCvForm";
 import { useCvFormContext } from "@/hooks/useCvForm";
+import { cn } from "@/lib/utils";
+
+interface ExtendedCvFormContext {
+  activeHighlight?: string | null;
+}
 
 export function SkillsOthersForm() {
   const {
@@ -18,7 +24,8 @@ export function SkillsOthersForm() {
     addSkillAchievement,
     updateSkillAchievement,
     removeSkillAchievement,
-  } = useCvFormContext();
+    activeHighlight,
+  } = useCvFormContext() as CvFormContextType & ExtendedCvFormContext;
   // Standard categories list
   const categories = [
     "Hard Skills",
@@ -31,7 +38,7 @@ export function SkillsOthersForm() {
   ];
 
   return (
-    <div className="mt-6 flex flex-col gap-6">
+    <div id="skills-others" className="mt-6 flex flex-col gap-6">
       {skillsAchievements.map((item, index) => {
         // Check if current category is custom
         const isCustomCategory =
@@ -40,7 +47,11 @@ export function SkillsOthersForm() {
         return (
           <div
             key={item.id}
-            className="flex flex-col gap-4 rounded-xl border bg-card p-6 relative animate-in fade-in duration-200"
+            className={cn(
+              "flex flex-col gap-4 rounded-xl border bg-card p-6 relative animate-in fade-in duration-200 transition-all",
+              activeHighlight === "skills-others" &&
+                "ring-2 ring-primary ring-offset-2 border-primary",
+            )}
           >
             {/* Delete Button top right */}
             <Button

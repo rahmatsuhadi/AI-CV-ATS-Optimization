@@ -47,8 +47,13 @@ export interface CvData {
   name: string;
   is_base: boolean;
   structured_json: CvStructuredJson | null;
+  job_id?: string | null;
   created_at?: string;
   updated_at?: string;
+  jobs?: {
+    company_name: string;
+    position: string;
+  } | null;
 }
 
 export interface ParsedCvData {

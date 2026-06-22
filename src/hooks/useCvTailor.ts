@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { getBaseCV, updateCV } from "@/actions/cv";
+import {
+  createCV,
+  getBaseCV,
+  getTailoredCVForJob,
+  updateCV,
+} from "@/actions/cv";
 import type { JobData } from "@/actions/job";
 import { analyzeCvMatch, updateJob } from "@/actions/job";
 import { parseCvStructuredJson } from "@/services/cv-parser";
@@ -76,7 +81,14 @@ export function useCvTailor(
     );
 
     try {
-      const res = await getBaseCV();
+      let res = null;
+      if (initialJob?.id) {
+        res = await getTailoredCVForJob(initialJob.id);
+      }
+      if (!res || !res.success || !res.data) {
+        res = await getBaseCV();
+      }
+
       if (res.success && res.data) {
         const cv = res.data;
         setBaseCv(cv);
@@ -175,15 +187,29 @@ export function useCvTailor(
         ),
       };
 
-      const res = await updateCV(
-        baseCv.id,
-        cvForm.name,
-        finalCvData,
-        cvForm.isBase,
-      );
+      // Jika CV saat ini memiliki job_id matching (artinya kita mengedit tailored CV yang sudah ada), update.
+      // Jika tidak (artinya kita mengedit base CV), buat CV baru yang terhubung ke job.
+      let res: { success: boolean; data?: CvData; error?: string };
+      if (baseCv.job_id === initialJob?.id) {
+        res = await updateCV(
+          baseCv.id,
+          cvForm.name,
+          finalCvData,
+          false, // isBase = false
+        );
+      } else {
+        res = await createCV(
+          cvForm.name,
+          finalCvData,
+          false, // isBase = false
+          initialJob?.id, // jobId
+        );
+      }
       toast.dismiss(toastId);
 
-      if (res.success) {
+      if (res.success && res.data) {
+        // Simpan hasil CV baru/terupdate ke local state
+        setBaseCv(res.data);
         toast.success("CV berhasil diselaraskan dan disimpan ke database!");
 
         // Re-calculate matching with ParsedCvData layout using AI

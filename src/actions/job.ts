@@ -20,6 +20,7 @@ export interface JobData {
   description?: string | null;
   requirements?: string[] | null;
   applied_at?: string;
+  created_at?: string;
   salary_range?: string | null;
   ats_score?: number | null;
   matched_keywords?: string[] | null;
@@ -367,6 +368,82 @@ Return ONLY valid JSON. Do not include markdown formatting like \`\`\`json.`;
         error instanceof Error
           ? error.message
           : "Failed to analyze CV matching with AI",
+    };
+  }
+}
+
+export async function applyCvSuggestion(
+  tab: string,
+  field: string,
+  currentData: unknown,
+  suggestionFix: string,
+  suggestionIssue: string,
+) {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const systemPrompt = `You are an expert resume builder and editor.
+Your task is to apply a specific CV suggestion (issue & fix/instruction) to a candidate's CV data and return the revised, updated data.
+You must return only the updated data structure matching the exact same schema and type as the Current Data.
+
+Tab: ${tab}
+Field: ${field}
+Suggestion Issue: ${suggestionIssue}
+Suggestion Fix/Instruction: ${suggestionFix}
+
+Current Data:
+${JSON.stringify(currentData, null, 2)}
+
+Instructions:
+1. Carefully revise the Current Data using the Suggestion Fix/Instruction.
+2. Maintain the exact same JSON format, fields, and structure as the Current Data.
+3. Make sure the output is clean, professional, and directly incorporates the requested change. Do not invent unrelated details.
+4. If the Current Data is a string wrapped in an object like { "text": "..." }, return the revised object with the revised "text" string.
+5. If the Current Data is an object or array, return the revised object or array with the same properties.
+
+Output ONLY the revised data as a JSON value. Do not include markdown formatting like \`\`\`json.`;
+
+    const response = await openai.chat.completions.create({
+      model: "gemini/gemini-3.1-flash-lite-preview",
+      messages: [
+        { role: "system", content: systemPrompt },
+        {
+          role: "user",
+          content: "Apply the suggestion and return the updated JSON.",
+        },
+      ],
+    });
+
+    const aiResponseContent = response.choices[0]?.message?.content;
+
+    if (!aiResponseContent) {
+      return { success: false, error: "AI failed to generate a response." };
+    }
+
+    let jsonText = aiResponseContent.trim();
+    if (jsonText.startsWith("```")) {
+      jsonText = jsonText
+        .replace(/^```(?:json)?\n?/, "")
+        .replace(/\n?```$/, "");
+    }
+
+    const parsedData = JSON.parse(jsonText.trim());
+    return { success: true, data: parsedData };
+  } catch (error) {
+    console.error("Error applying CV suggestion with AI:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to apply CV suggestion with AI",
     };
   }
 }

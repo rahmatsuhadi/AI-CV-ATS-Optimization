@@ -24,6 +24,7 @@ interface JobRowProps {
   status: JobStatus;
   appliedAt: string;
   className?: string;
+  atsScore?: number | null;
 }
 
 export function JobRow({
@@ -33,6 +34,7 @@ export function JobRow({
   status: initialStatus,
   appliedAt,
   className,
+  atsScore,
 }: JobRowProps) {
   const [status, setStatus] = useState<JobStatus>(initialStatus);
 
@@ -78,9 +80,28 @@ export function JobRow({
           >
             {position}
           </Link>
-          <p className="font-mono text-[11px] text-muted-foreground">
-            {company}
-          </p>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <p className="font-mono text-[11px] text-muted-foreground">
+              {company}
+            </p>
+            {atsScore !== undefined && atsScore !== null && atsScore > 0 && (
+              <>
+                <span className="text-[10px] text-muted-foreground">•</span>
+                <span
+                  className={cn(
+                    "text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-md border",
+                    atsScore >= 80
+                      ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+                      : atsScore >= 60
+                        ? "bg-amber-500/10 text-amber-600 border-amber-500/20"
+                        : "bg-rose-500/10 text-rose-600 border-rose-500/20",
+                  )}
+                >
+                  ATS: {atsScore}%
+                </span>
+              </>
+            )}
+          </div>
         </div>
       </div>
 

@@ -79,6 +79,10 @@ export function CvList({ cvs }: CvListProps) {
                   ? "Updated recently"
                   : `Updated ${diffDays} days ago`;
 
+              const jobInfo = Array.isArray(cv.jobs) ? cv.jobs[0] : cv.jobs;
+              const companyName = jobInfo?.company_name;
+              const position = jobInfo?.position;
+
               return (
                 <CvCard
                   key={cv.id}
@@ -86,6 +90,8 @@ export function CvList({ cvs }: CvListProps) {
                   name={cv.name + (cv.is_base ? " (Base)" : "")}
                   score={undefined}
                   updatedAt={formattedDate}
+                  companyName={companyName}
+                  position={position}
                 />
               );
             })}

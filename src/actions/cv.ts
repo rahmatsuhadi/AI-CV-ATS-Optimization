@@ -129,11 +129,11 @@ export async function getCVs() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user) return { error: "Unauthorized" };
+    if (!user) return { success: false, error: "Unauthorized" };
 
     const { data, error } = await supabase
       .from("cvs")
-      .select("*")
+      .select("*, jobs(company_name, position)")
       .order("created_at", { ascending: false });
 
     if (error) throw error;
@@ -141,6 +141,7 @@ export async function getCVs() {
   } catch (error) {
     console.error("Error fetching CVs:", error);
     return {
+      success: false,
       error: error instanceof Error ? error.message : "Failed to fetch CVs",
     };
   }
@@ -211,17 +212,45 @@ export async function getBaseCV() {
   }
 }
 
+export async function getTailoredCVForJob(jobId: string) {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { success: false, error: "Unauthorized" };
+
+    const { data, error } = await supabase
+      .from("cvs")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("job_id", jobId)
+      .maybeSingle();
+
+    if (error) throw error;
+    return { success: true, data };
+  } catch (error) {
+    console.error("Error fetching tailored CV for job:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to fetch tailored CV",
+    };
+  }
+}
+
 export async function createCV(
   name: string,
   structuredJson: unknown,
   isBase = false,
+  jobId?: string,
 ) {
   try {
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user) return { error: "Unauthorized" };
+    if (!user) return { success: false, error: "Unauthorized" };
 
     // Jika ini ditandai sebagai base, set is_base = false untuk CV lainnya
     if (isBase) {
@@ -238,6 +267,7 @@ export async function createCV(
         name,
         structured_json: structuredJson,
         is_base: isBase,
+        job_id: jobId || null,
       })
       .select()
       .single();
@@ -247,6 +277,7 @@ export async function createCV(
   } catch (error) {
     console.error("Error creating CV:", error);
     return {
+      success: false,
       error: error instanceof Error ? error.message : "Failed to create CV",
     };
   }
@@ -263,7 +294,7 @@ export async function updateCV(
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user) return { error: "Unauthorized" };
+    if (!user) return { success: false, error: "Unauthorized" };
 
     // Jika ini ditandai sebagai base, set is_base = false untuk CV lainnya
     if (isBase) {
@@ -291,6 +322,7 @@ export async function updateCV(
   } catch (error) {
     console.error("Error updating CV:", error);
     return {
+      success: false,
       error: error instanceof Error ? error.message : "Failed to update CV",
     };
   }
