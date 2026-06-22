@@ -32,17 +32,7 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="mt-auto">
-        <div className="rounded-xl border border-border/60 bg-muted/40 p-4">
-          <p className="text-xs font-semibold text-foreground">Fase 1 — MVP</p>
-          <p className="mt-1 text-[11px] text-muted-foreground leading-relaxed">
-            Parsing & analisis aktif. Ekspor segera hadir.
-          </p>
-          <div className="mt-3 h-1.5 rounded-full bg-border overflow-hidden">
-            <div className="h-full w-1/3 rounded-full bg-primary" />
-          </div>
-        </div>
-      </div>
+
     </aside>
   );
 }

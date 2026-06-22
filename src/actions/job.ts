@@ -1,14 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import OpenAI from "openai";
 import { createClient } from "@/lib/supabase/server";
+import { generateChatCompletion } from "@/services/ai";
 import type { ParsedCvData } from "@/types/cv";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "sk-dummy",
-  baseURL: process.env.OPENAI_BASE_URL || "http://localhost:20128/v1",
-});
 
 export interface JobData {
   id: string;
@@ -227,18 +222,11 @@ Output ONLY a valid JSON object matching this EXACT schema:
 
 Return ONLY valid JSON. Do not include markdown formatting like \`\`\`json.`;
 
-    const response = await openai.chat.completions.create({
-      model: "gemini/gemini-3.1-flash-lite-preview",
-      messages: [
-        { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: `Here is the raw job description:\n\n${rawText}`,
-        },
-      ],
-    });
-
-    const aiResponseContent = response.choices[0]?.message?.content;
+    const aiResponseContent = await generateChatCompletion(
+      systemPrompt,
+      `Here is the raw job description:\n\n${rawText}`,
+      { json: true },
+    );
 
     if (!aiResponseContent) {
       return { success: false, error: "AI failed to generate a response." };
@@ -337,15 +325,11 @@ Output ONLY a valid JSON object matching this EXACT schema:
 
 Return ONLY valid JSON. Do not include markdown formatting like \`\`\`json.`;
 
-    const response = await openai.chat.completions.create({
-      model: "gemini/gemini-3.1-flash-lite-preview",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: "Analyze and compute matching details." },
-      ],
-    });
-
-    const aiResponseContent = response.choices[0]?.message?.content;
+    const aiResponseContent = await generateChatCompletion(
+      systemPrompt,
+      "Analyze and compute matching details.",
+      { json: true },
+    );
 
     if (!aiResponseContent) {
       return { success: false, error: "AI failed to generate matching score." };
@@ -410,18 +394,11 @@ Instructions:
 
 Output ONLY the revised data as a JSON value. Do not include markdown formatting like \`\`\`json.`;
 
-    const response = await openai.chat.completions.create({
-      model: "gemini/gemini-3.1-flash-lite-preview",
-      messages: [
-        { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: "Apply the suggestion and return the updated JSON.",
-        },
-      ],
-    });
-
-    const aiResponseContent = response.choices[0]?.message?.content;
+    const aiResponseContent = await generateChatCompletion(
+      systemPrompt,
+      "Apply the suggestion and return the updated JSON.",
+      { json: true },
+    );
 
     if (!aiResponseContent) {
       return { success: false, error: "AI failed to generate a response." };

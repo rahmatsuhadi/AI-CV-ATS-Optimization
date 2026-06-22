@@ -2,10 +2,9 @@
 
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import OpenAI from "openai";
-// import { default as pdf } from "pdf-parse";
 import { PDFParse } from "pdf-parse";
 import { createClient } from "@/lib/supabase/server";
+import { generateChatCompletion } from "@/services/ai";
 
 // Konfigurasi worker lokal berbasis file:// untuk kompatibilitas Node.js ESM loader di Next.js Server Actions
 const localWorkerPath = path.join(
@@ -13,12 +12,6 @@ const localWorkerPath = path.join(
   "node_modules/pdf-parse/dist/pdf-parse/cjs/pdf.worker.mjs",
 );
 PDFParse.setWorker(pathToFileURL(localWorkerPath).href);
-
-// Inisialisasi OpenAI client mengarah ke local host sesuai instruksi
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "sk-dummy",
-  baseURL: process.env.OPENAI_BASE_URL || "http://localhost:20128/v1",
-});
 
 export async function parsePdfToCv(formData: FormData) {
   try {
@@ -92,16 +85,11 @@ Output ONLY a valid JSON object matching this EXACT schema:
 
 Return ONLY valid JSON. Do not include markdown formatting like \`\`\`json.`;
 
-    const response = await openai.chat.completions.create({
-      model: "gemini/gemini-3.1-flash-lite-preview", // Model lokal sesuai instruksi pengguna
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: `Here is the raw CV text:\n\n${rawText}` },
-      ],
-      // response_format: { type: "json_object" }, // Memaksa AI output bentuk JSON
-    });
-
-    const aiResponseContent = response.choices[0]?.message?.content;
+    const aiResponseContent = await generateChatCompletion(
+      systemPrompt,
+      `Here is the raw CV text:\n\n${rawText}`,
+      { json: true },
+    );
 
     if (!aiResponseContent) {
       return { error: "AI failed to generate a response." };
@@ -109,8 +97,6 @@ Return ONLY valid JSON. Do not include markdown formatting like \`\`\`json.`;
 
     // Parsing string kembalian AI jadi objek JSON
     const parsedData = JSON.parse(aiResponseContent as string);
-    console.log("SELESAI", parsedData);
-
     return { success: true, data: parsedData };
   } catch (error) {
     console.error("Error parsing CV:", error);

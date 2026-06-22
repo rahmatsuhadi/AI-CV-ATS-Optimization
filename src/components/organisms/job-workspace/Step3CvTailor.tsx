@@ -269,11 +269,32 @@ export function Step3CvTailor({
         <div className="flex flex-col gap-5 rounded-2xl border border-border/60 bg-card p-6 shadow-sm overflow-hidden">
           <div className="flex items-center gap-5">
             <ScoreRing score={matchScore} size={84} />
-            <div className="flex flex-col">
-              <span className="font-heading text-xl font-bold tracking-tight">
-                Skor Kecocokan
-              </span>
-              <span className="text-[13px] text-muted-foreground leading-relaxed">
+            <div className="flex flex-col flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-4">
+                <span className="font-heading text-xl font-bold tracking-tight">
+                  Skor Kecocokan
+                </span>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleRunAnalysis}
+                  disabled={loadingMatch}
+                  className="rounded-xl h-8 text-[11px] font-semibold border-border shadow-sm shrink-0"
+                >
+                  {loadingMatch ? (
+                    <>
+                      <Loader2Icon className="mr-1 size-3 animate-spin" />
+                      Menganalisis...
+                    </>
+                  ) : (
+                    <>
+                      <ScanSearchIcon className="mr-1 size-3" />
+                      Analisis Ulang
+                    </>
+                  )}
+                </Button>
+              </div>
+              <span className="text-[13px] text-muted-foreground leading-relaxed mt-1">
                 {matchScore >= 80
                   ? "Sangat kuat! Lakukan penyesuaian kecil di bawah untuk lolos filter ATS."
                   : matchScore >= 60
