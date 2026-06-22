@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
+const jakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "CV Optimizer AI",
-  description: "Optimize your CV for ATS and track job applications.",
+  title: "mbuh-job",
+  description: "Kelola lamaran kerja, optimalkan CV untuk ATS, dan pantau pipeline rekrutmen.",
 };
 
 export default function RootLayout({
@@ -14,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("h-full", "antialiased", "font-sans")}>
+    <html lang="id" className={cn("h-full", "antialiased", "font-sans", jakartaSans.variable)}>
       <body className="min-h-full flex flex-col selection:bg-primary/30 selection:text-primary">
         {/* Subtle noise texture overlay for high-end SaaS feel */}
         <div

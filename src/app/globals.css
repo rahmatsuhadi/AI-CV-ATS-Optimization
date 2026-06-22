@@ -99,62 +99,62 @@
   --sidebar-border: #e4e4e7;
   --sidebar-ring: #4338ca;
 
-  /* Font fallbacks for offline compilation */
+  /* Font — Plus Jakarta Sans (friendly, modern, SaaS-ready) */
   --font-sans:
-    "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
+    var(--font-jakarta), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
   --font-mono:
     "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     monospace;
   --font-heading:
-    "Bricolage Grotesque", system-ui, -apple-system, BlinkMacSystemFont,
+    var(--font-jakarta), system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, sans-serif;
 }
 
 .dark {
-  /* Ultra-sleek technical SaaS - Dark mode */
-  --background: #050505;
-  --foreground: #ededed;
-  --surface: #0f0f0f;
-  --card: #0a0a0a;
-  --card-foreground: #ededed;
-  --popover: #0a0a0a;
-  --popover-foreground: #ededed;
+  /* Professional SaaS - Dark mode (aligned with DESIGN.md) */
+  --background: #0b0f17;
+  --foreground: #e5e7eb;
+  --surface: #111827;
+  --card: #1f2937;
+  --card-foreground: #e5e7eb;
+  --popover: #1f2937;
+  --popover-foreground: #e5e7eb;
 
-  /* Electric Violet - vibrant contrast against true blacks */
-  --primary: #7c3aed;
+  /* Electric Indigo - primary accent */
+  --primary: #4f46e5;
   --primary-foreground: #ffffff;
 
-  --secondary: #171717;
-  --secondary-foreground: #ededed;
-  --muted: #171717;
-  --muted-foreground: #a3a3a3;
-  --accent: #171717;
-  --accent-foreground: #ededed;
+  --secondary: #1f2937;
+  --secondary-foreground: #e5e7eb;
+  --muted: #1f2937;
+  --muted-foreground: #9ca3af;
+  --accent: #1f2937;
+  --accent-foreground: #e5e7eb;
 
-  --success: #10b981;
+  --success: #22c55e;
   --warning: #f59e0b;
   --danger: #ef4444;
   --destructive: #ef4444;
 
-  --border: #262626;
-  --input: #262626;
-  --ring: #7c3aed;
+  --border: #374151;
+  --input: #374151;
+  --ring: #4f46e5;
 
-  --chart-1: #7c3aed;
-  --chart-2: #10b981;
+  --chart-1: #4f46e5;
+  --chart-2: #22c55e;
   --chart-3: #f59e0b;
   --chart-4: #ef4444;
-  --chart-5: #a855f7;
+  --chart-5: #8b5cf6;
 
-  --sidebar: #050505;
-  --sidebar-foreground: #ededed;
-  --sidebar-primary: #7c3aed;
+  --sidebar: #0b0f17;
+  --sidebar-foreground: #e5e7eb;
+  --sidebar-primary: #4f46e5;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #171717;
-  --sidebar-accent-foreground: #ededed;
-  --sidebar-border: #262626;
-  --sidebar-ring: #7c3aed;
+  --sidebar-accent: #1f2937;
+  --sidebar-accent-foreground: #e5e7eb;
+  --sidebar-border: #374151;
+  --sidebar-ring: #4f46e5;
 }
 
 @layer base {
@@ -170,7 +170,7 @@
   h4,
   h5,
   h6 {
-    @apply font-heading tracking-tight;
+    @apply font-heading font-extrabold tracking-tight;
   }
 }
 
