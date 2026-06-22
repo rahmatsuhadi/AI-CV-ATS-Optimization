@@ -1,12 +1,21 @@
 "use server";
 
+// Polyfill Node.js environment for pdfjs-dist / pdf-parse module evaluation
+if (typeof globalThis.DOMMatrix === "undefined") {
+  // @ts-expect-error
+  globalThis.DOMMatrix = class DOMMatrix {};
+}
+if (typeof globalThis.Path2D === "undefined") {
+  // @ts-expect-error
+  globalThis.Path2D = class Path2D {};
+}
+
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { PDFParse } from "pdf-parse";
 import { createClient } from "@/lib/supabase/server";
 import { generateChatCompletion } from "@/services/ai";
 
-// Konfigurasi worker lokal berbasis file:// untuk kompatibilitas Node.js ESM loader di Next.js Server Actions
 const localWorkerPath = path.join(
   process.cwd(),
   "node_modules/pdf-parse/dist/pdf-parse/cjs/pdf.worker.mjs",
