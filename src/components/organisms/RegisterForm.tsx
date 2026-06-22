@@ -11,7 +11,10 @@ import { Label } from "@/components/ui/label";
 export function RegisterForm() {
   const router = useRouter();
 
-  const registerAction = async (_prevState: any, formData: FormData) => {
+  const registerAction = async (
+    _prevState: { error: string | null } | null,
+    formData: FormData,
+  ) => {
     const result = await registerWithPassword(formData);
     if (result.error) {
       return { error: result.error };

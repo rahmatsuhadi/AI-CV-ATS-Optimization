@@ -12,7 +12,10 @@ import { Label } from "@/components/ui/label";
 export function LoginForm() {
   const router = useRouter();
 
-  const loginAction = async (_prevState: any, formData: FormData) => {
+  const loginAction = async (
+    _prevState: { error: string | null } | null,
+    formData: FormData,
+  ) => {
     const result = await loginWithPassword(formData);
     if (result.error) {
       return { error: result.error };
