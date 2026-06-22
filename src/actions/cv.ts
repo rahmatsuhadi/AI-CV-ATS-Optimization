@@ -12,15 +12,8 @@ if (typeof globalThis.Path2D === "undefined") {
 
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { PDFParse } from "pdf-parse";
 import { createClient } from "@/lib/supabase/server";
 import { generateChatCompletion } from "@/services/ai";
-
-const localWorkerPath = path.join(
-  process.cwd(),
-  "node_modules/pdf-parse/dist/pdf-parse/cjs/pdf.worker.mjs",
-);
-PDFParse.setWorker(pathToFileURL(localWorkerPath).href);
 
 export async function parsePdfToCv(formData: FormData) {
   try {
@@ -32,6 +25,15 @@ export async function parsePdfToCv(formData: FormData) {
     // Ubah Next.js File jadi Buffer agar bisa dibaca pdf-parse
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+
+    // Dynamic import pdf-parse so polyfills run first and prevent ESM import hoisting
+    const { PDFParse } = await import("pdf-parse");
+    const localWorkerPath = path.join(
+      process.cwd(),
+      "node_modules/pdf-parse/dist/pdf-parse/cjs/pdf.worker.mjs",
+    );
+    PDFParse.setWorker(pathToFileURL(localWorkerPath).href);
+
     const pdfParser = new PDFParse({ data: buffer });
 
     // Ekstrak teks dari PDF
