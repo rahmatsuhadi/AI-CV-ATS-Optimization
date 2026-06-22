@@ -1,25 +1,7 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
-
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  display: "swap",
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const jbMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "CV Optimizer AI",
@@ -32,17 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={cn(
-        "h-full dark",
-        "antialiased",
-        bricolage.variable,
-        dmSans.variable,
-        jbMono.variable,
-        "font-sans",
-      )}
-    >
+    <html lang="en" className={cn("h-full", "antialiased", "font-sans")}>
       <body className="min-h-full flex flex-col selection:bg-primary/30 selection:text-primary">
         {/* Subtle noise texture overlay for high-end SaaS feel */}
         <div
@@ -53,6 +25,7 @@ export default function RootLayout({
           }}
         ></div>
         {children}
+        <Toaster />
       </body>
     </html>
   );
