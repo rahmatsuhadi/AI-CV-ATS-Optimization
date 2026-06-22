@@ -13,7 +13,8 @@ const jakartaSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "mbuh-job",
-  description: "Kelola lamaran kerja, optimalkan CV untuk ATS, dan pantau pipeline rekrutmen.",
+  description:
+    "Kelola lamaran kerja, optimalkan CV untuk ATS, dan pantau pipeline rekrutmen.",
 };
 
 export default function RootLayout({
@@ -22,7 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={cn("h-full", "antialiased", "font-sans", jakartaSans.variable)}>
+    <html
+      lang="id"
+      className={cn("h-full", "antialiased", "font-sans", jakartaSans.variable)}
+    >
       <body className="min-h-full flex flex-col selection:bg-primary/30 selection:text-primary">
         {/* Subtle noise texture overlay for high-end SaaS feel */}
         <div

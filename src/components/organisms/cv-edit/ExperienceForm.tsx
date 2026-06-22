@@ -3,31 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type { Experience } from "@/types/cv";
+import { useCvFormContext } from "@/hooks/useCvForm";
 
-interface ExperienceFormProps {
-  experiences: Experience[];
-  addExperience: () => void;
-  updateExperience: (index: number, fields: Partial<Experience>) => void;
-  removeExperience: (index: number) => void;
-  addExperienceBullet: (expIndex: number) => void;
-  updateExperienceBullet: (
-    expIndex: number,
-    bulletIndex: number,
-    value: string,
-  ) => void;
-  removeExperienceBullet: (expIndex: number, bulletIndex: number) => void;
-}
-
-export function ExperienceForm({
-  experiences,
-  addExperience,
-  updateExperience,
-  removeExperience,
-  addExperienceBullet,
-  updateExperienceBullet,
-  removeExperienceBullet,
-}: ExperienceFormProps) {
+export function ExperienceForm() {
+  const {
+    experiences,
+    addExperience,
+    updateExperience,
+    removeExperience,
+    addExperienceBullet,
+    updateExperienceBullet,
+    removeExperienceBullet,
+  } = useCvFormContext();
   return (
     <div className="mt-6 flex flex-col gap-6">
       {experiences.map((exp, index) => (

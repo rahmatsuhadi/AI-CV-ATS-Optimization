@@ -10,26 +10,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import type { SkillAchievementItem } from "@/types/cv";
+import { useCvFormContext } from "@/hooks/useCvForm";
 
-interface SkillsOthersFormProps {
-  skillsAchievements: SkillAchievementItem[];
-  addSkillAchievement: () => void;
-  updateSkillAchievement: (
-    index: number,
-    fields: Partial<SkillAchievementItem>,
-  ) => void;
-  removeSkillAchievement: (index: number) => void;
-  expandedItems: string[];
-  toggleExpandItem: (id: string) => void;
-}
-
-export function SkillsOthersForm({
-  skillsAchievements,
-  addSkillAchievement,
-  updateSkillAchievement,
-  removeSkillAchievement,
-}: SkillsOthersFormProps) {
+export function SkillsOthersForm() {
+  const {
+    skillsAchievements,
+    addSkillAchievement,
+    updateSkillAchievement,
+    removeSkillAchievement,
+  } = useCvFormContext();
   // Standard categories list
   const categories = [
     "Hard Skills",

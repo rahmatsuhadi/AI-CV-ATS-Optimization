@@ -18,14 +18,6 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-// Types
-import type {
-  Education,
-  Experience,
-  Personal,
-  SkillAchievementItem,
-} from "@/types/cv";
-
 interface Suggestion {
   field: string;
   tab: string;
@@ -51,43 +43,6 @@ interface Step3CvTailorProps {
   setActiveHighlight: (val: string | null) => void;
   activeCvTab: string;
   setActiveCvTab: (val: string) => void;
-  cvName: string;
-  setCvName: (val: string) => void;
-  cvIsBase: boolean;
-  setCvIsBase: (val: boolean) => void;
-  personal: Personal;
-  setPersonal: React.Dispatch<React.SetStateAction<Personal>>;
-  experiences: Experience[];
-  addExperience: () => void;
-  updateExperience: (index: number, fields: Partial<Experience>) => void;
-  removeExperience: (index: number) => void;
-  addExperienceBullet: (expIndex: number) => void;
-  updateExperienceBullet: (
-    expIndex: number,
-    bulletIndex: number,
-    value: string,
-  ) => void;
-  removeExperienceBullet: (expIndex: number, bulletIndex: number) => void;
-  educations: Education[];
-  addEducation: () => void;
-  updateEducation: (index: number, fields: Partial<Education>) => void;
-  removeEducation: (index: number) => void;
-  addEducationBullet: (eduIndex: number) => void;
-  updateEducationBullet: (
-    eduIndex: number,
-    bulletIndex: number,
-    value: string,
-  ) => void;
-  removeEducationBullet: (eduIndex: number, bulletIndex: number) => void;
-  skillsAchievements: SkillAchievementItem[];
-  addSkillAchievement: () => void;
-  updateSkillAchievement: (
-    index: number,
-    fields: Partial<SkillAchievementItem>,
-  ) => void;
-  removeSkillAchievement: (index: number) => void;
-  expandedItems: string[];
-  toggleExpandItem: (id: string) => void;
   cvSaving: boolean;
   handleSaveCv: () => void;
   handleRunAnalysis: () => void;
@@ -106,32 +61,6 @@ export function Step3CvTailor({
   setActiveHighlight,
   activeCvTab,
   setActiveCvTab,
-  cvName,
-  setCvName,
-  cvIsBase,
-  setCvIsBase,
-  personal,
-  setPersonal,
-  experiences,
-  addExperience,
-  updateExperience,
-  removeExperience,
-  addExperienceBullet,
-  updateExperienceBullet,
-  removeExperienceBullet,
-  educations,
-  addEducation,
-  updateEducation,
-  removeEducation,
-  addEducationBullet,
-  updateEducationBullet,
-  removeEducationBullet,
-  skillsAchievements,
-  addSkillAchievement,
-  updateSkillAchievement,
-  removeSkillAchievement,
-  expandedItems,
-  toggleExpandItem,
   cvSaving,
   handleSaveCv,
   handleRunAnalysis,
@@ -389,14 +318,7 @@ export function Step3CvTailor({
                   "ring-2 ring-primary ring-offset-2 border-primary",
               )}
             >
-              <PersonalForm
-                personal={personal}
-                setPersonal={setPersonal}
-                name={cvName}
-                setName={setCvName}
-                isBase={cvIsBase}
-                setIsBase={setCvIsBase}
-              />
+              <PersonalForm />
             </TabsContent>
 
             <TabsContent
@@ -407,30 +329,14 @@ export function Step3CvTailor({
                   "ring-2 ring-primary ring-offset-2 border-primary",
               )}
             >
-              <ExperienceForm
-                experiences={experiences}
-                addExperience={addExperience}
-                updateExperience={updateExperience}
-                removeExperience={removeExperience}
-                addExperienceBullet={addExperienceBullet}
-                updateExperienceBullet={updateExperienceBullet}
-                removeExperienceBullet={removeExperienceBullet}
-              />
+              <ExperienceForm />
             </TabsContent>
 
             <TabsContent
               value="education"
               className="outline-none rounded-xl mt-3"
             >
-              <EducationForm
-                educations={educations}
-                addEducation={addEducation}
-                updateEducation={updateEducation}
-                removeEducation={removeEducation}
-                addEducationBullet={addEducationBullet}
-                updateEducationBullet={updateEducationBullet}
-                removeEducationBullet={removeEducationBullet}
-              />
+              <EducationForm />
             </TabsContent>
 
             <TabsContent
@@ -441,14 +347,7 @@ export function Step3CvTailor({
                   "ring-2 ring-primary ring-offset-2 border-primary",
               )}
             >
-              <SkillsOthersForm
-                skillsAchievements={skillsAchievements}
-                addSkillAchievement={addSkillAchievement}
-                updateSkillAchievement={updateSkillAchievement}
-                removeSkillAchievement={removeSkillAchievement}
-                expandedItems={expandedItems}
-                toggleExpandItem={toggleExpandItem}
-              />
+              <SkillsOthersForm />
             </TabsContent>
           </Tabs>
         </div>

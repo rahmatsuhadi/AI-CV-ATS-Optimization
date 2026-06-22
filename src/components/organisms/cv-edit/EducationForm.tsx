@@ -3,31 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type { Education } from "@/types/cv";
+import { useCvFormContext } from "@/hooks/useCvForm";
 
-interface EducationFormProps {
-  educations: Education[];
-  addEducation: () => void;
-  updateEducation: (index: number, fields: Partial<Education>) => void;
-  removeEducation: (index: number) => void;
-  addEducationBullet: (eduIndex: number) => void;
-  updateEducationBullet: (
-    eduIndex: number,
-    bulletIndex: number,
-    value: string,
-  ) => void;
-  removeEducationBullet: (eduIndex: number, bulletIndex: number) => void;
-}
-
-export function EducationForm({
-  educations,
-  addEducation,
-  updateEducation,
-  removeEducation,
-  addEducationBullet,
-  updateEducationBullet,
-  removeEducationBullet,
-}: EducationFormProps) {
+export function EducationForm() {
+  const {
+    educations,
+    addEducation,
+    updateEducation,
+    removeEducation,
+    addEducationBullet,
+    updateEducationBullet,
+    removeEducationBullet,
+  } = useCvFormContext();
   return (
     <div className="mt-6 flex flex-col gap-6">
       {educations.map((edu, index) => (

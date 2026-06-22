@@ -61,7 +61,9 @@ export default async function DashboardPage() {
     const timeDiff = Math.abs(Date.now() - date.getTime());
     const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     const formattedDate =
-      diffDays <= 1 ? "Baru saja diperbarui" : `Diperbarui ${diffDays} hari lalu`;
+      diffDays <= 1
+        ? "Baru saja diperbarui"
+        : `Diperbarui ${diffDays} hari lalu`;
 
     return {
       id: cv.id,

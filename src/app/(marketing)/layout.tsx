@@ -23,7 +23,8 @@ export default function MarketingLayout({
       <main className="flex-1">{children}</main>
       <footer className="border-t border-border/60 py-10 text-center">
         <p className="font-mono text-[11px] text-muted-foreground tracking-wider">
-          {new Date().getFullYear()} mbuh-job — dibuat untuk pencari kerja modern
+          {new Date().getFullYear()} mbuh-job — dibuat untuk pencari kerja
+          modern
         </p>
       </footer>
     </div>

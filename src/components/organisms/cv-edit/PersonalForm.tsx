@@ -2,25 +2,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useCvFormContext } from "@/hooks/useCvForm";
 import type { Personal } from "@/types/cv";
 
-interface PersonalFormProps {
-  personal: Personal;
-  setPersonal: React.Dispatch<React.SetStateAction<Personal>>;
-  name: string;
-  setName: (name: string) => void;
-  isBase: boolean;
-  setIsBase: (isBase: boolean) => void;
-}
+export function PersonalForm() {
+  const { personal, setPersonal, name, setName, isBase, setIsBase } =
+    useCvFormContext();
 
-export function PersonalForm({
-  personal,
-  setPersonal,
-  name,
-  setName,
-  isBase,
-  setIsBase,
-}: PersonalFormProps) {
   const handleChange = (field: keyof Personal, value: string) => {
     setPersonal((prev) => ({ ...prev, [field]: value }));
   };
