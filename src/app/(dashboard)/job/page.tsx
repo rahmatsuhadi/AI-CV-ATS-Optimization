@@ -74,9 +74,7 @@ export default async function JobPage() {
                 company={job.company_name}
                 position={job.position}
                 status={job.status}
-                appliedAt={formatDate(
-                  job.applied_at || job.created_at,
-                )}
+                appliedAt={formatDate(job.applied_at || job.created_at)}
                 atsScore={job.ats_score}
               />
             ))

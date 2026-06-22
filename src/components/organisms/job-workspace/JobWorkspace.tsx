@@ -3,6 +3,7 @@
 import type { JobData } from "@/actions/job";
 import { CvFormProvider } from "@/hooks/useCvForm";
 import { useJobWorkspace } from "@/hooks/useJobWorkspace";
+import type { EmailTemplate } from "@/lib/constants/templates";
 import { cn } from "@/lib/utils";
 import { Step1InputPlan } from "./Step1InputPlan";
 import { Step2PreviewExtract } from "./Step2PreviewExtract";
@@ -11,10 +12,14 @@ import { Step4EmailGen } from "./Step4EmailGen";
 
 interface JobWorkspaceProps {
   initialJob?: JobData;
+  initialTemplates?: EmailTemplate[];
 }
 
-export function JobWorkspace({ initialJob }: JobWorkspaceProps) {
-  const workspaceState = useJobWorkspace(initialJob);
+export function JobWorkspace({
+  initialJob,
+  initialTemplates = [],
+}: JobWorkspaceProps) {
+  const workspaceState = useJobWorkspace(initialJob, initialTemplates);
 
   const {
     step,
@@ -61,6 +66,7 @@ export function JobWorkspace({ initialJob }: JobWorkspaceProps) {
     handleSaveCv,
     handleGenerateEmailDraft,
     handleSendEmail,
+    handleCopyEmail,
   } = workspaceState;
 
   const steps = [
@@ -182,6 +188,7 @@ export function JobWorkspace({ initialJob }: JobWorkspaceProps) {
               companyName={companyName}
               handleGenerateEmail={handleGenerateEmailDraft}
               handleSendEmail={handleSendEmail}
+              handleCopyEmail={handleCopyEmail}
               handleBack={() => setStep(3)}
             />
           )}

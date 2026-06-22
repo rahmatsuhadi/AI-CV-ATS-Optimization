@@ -3,10 +3,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 import type { JobData } from "@/actions/job";
 import { createJob, extractJobDetails } from "@/actions/job";
+import type { EmailTemplate } from "@/lib/constants/templates";
 import { useCvTailor } from "./useCvTailor";
 import { useEmailGenerator } from "./useEmailGenerator";
 
-export function useJobWorkspace(initialJob?: JobData) {
+export function useJobWorkspace(
+  initialJob?: JobData,
+  initialTemplates: EmailTemplate[] = [],
+) {
   const router = useRouter();
 
   // Wizard state: start at Step 3 for existing job (since steps 1 & 2 are done), otherwise Step 1 for new job
@@ -123,6 +127,7 @@ export function useJobWorkspace(initialJob?: JobData) {
     position,
     emailTo,
     cvTailor.personal,
+    initialTemplates,
   );
 
   return {

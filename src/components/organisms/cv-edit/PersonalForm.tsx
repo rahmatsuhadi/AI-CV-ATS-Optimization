@@ -12,8 +12,15 @@ interface ExtendedCvFormContext {
 }
 
 export function PersonalForm({ hideIsBase = false }: { hideIsBase?: boolean }) {
-  const { personal, setPersonal, name, setName, isBase, setIsBase, activeHighlight } =
-    useCvFormContext() as CvFormContextType & ExtendedCvFormContext;
+  const {
+    personal,
+    setPersonal,
+    name,
+    setName,
+    isBase,
+    setIsBase,
+    activeHighlight,
+  } = useCvFormContext() as CvFormContextType & ExtendedCvFormContext;
 
   const handleChange = (field: keyof Personal, value: string) => {
     setPersonal((prev) => ({ ...prev, [field]: value }));

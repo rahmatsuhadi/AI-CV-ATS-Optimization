@@ -1,4 +1,4 @@
-import { DownloadIcon, MailIcon, RefreshCwIcon } from "lucide-react";
+import { CopyIcon, DownloadIcon, MailIcon, RefreshCwIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,13 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-
-interface EmailTemplate {
-  id: string;
-  name: string;
-  subject: string;
-  body: string;
-}
+import type { EmailTemplate } from "@/lib/constants/templates";
 
 interface Step4EmailGenProps {
   templates: EmailTemplate[];
@@ -31,6 +25,7 @@ interface Step4EmailGenProps {
   companyName: string;
   handleGenerateEmail: () => void;
   handleSendEmail: () => void;
+  handleCopyEmail: () => void;
   handleBack: () => void;
 }
 
@@ -44,6 +39,7 @@ export function Step4EmailGen({
   companyName,
   handleGenerateEmail,
   handleSendEmail,
+  handleCopyEmail,
   handleBack,
 }: Step4EmailGenProps) {
   return (
@@ -162,13 +158,25 @@ export function Step4EmailGen({
                   />
                 </div>
 
-                <Button
-                  onClick={handleSendEmail}
-                  className="w-full rounded-xl bg-success text-success-foreground hover:bg-success/90 h-11 font-bold text-sm shadow-md mt-1"
-                >
-                  <MailIcon className="mr-2 size-4" />
-                  Salin Pesan & Buka Email Client
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3 mt-1">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleCopyEmail}
+                    className="flex-1 rounded-xl border hover:bg-muted h-11 font-bold text-sm shadow-sm"
+                  >
+                    <CopyIcon className="mr-2 size-4" />
+                    Salin Pesan
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleSendEmail}
+                    className="flex-1 rounded-xl bg-success text-success-foreground hover:bg-success/90 h-11 font-bold text-sm shadow-md"
+                  >
+                    <MailIcon className="mr-2 size-4" />
+                    Kirim Email (Buka Client)
+                  </Button>
+                </div>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-[350px] border border-dashed border-border/80 rounded-xl bg-muted/10 text-center px-8">

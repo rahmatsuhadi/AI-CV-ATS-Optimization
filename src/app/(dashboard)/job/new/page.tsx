@@ -1,6 +1,11 @@
+import { getEmailTemplates } from "@/actions/email-template";
 import { JobWorkspace } from "@/components/organisms/job-workspace/JobWorkspace";
 
 export default async function NewJobPage() {
+  const templatesRes = await getEmailTemplates();
+  const initialTemplates =
+    templatesRes.success && templatesRes.data ? templatesRes.data : [];
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1 border-b border-border/40 pb-4">
@@ -13,7 +18,7 @@ export default async function NewJobPage() {
         </p>
       </div>
 
-      <JobWorkspace />
+      <JobWorkspace initialTemplates={initialTemplates} />
     </div>
   );
 }
