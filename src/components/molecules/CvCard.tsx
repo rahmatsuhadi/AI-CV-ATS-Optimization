@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit3Icon } from "lucide-react";
+import { Edit3Icon, PrinterIcon } from "lucide-react";
 import Link from "next/link";
 import { ScoreRing } from "@/components/atoms/ScoreRing";
 import { Button } from "@/components/ui/button";
@@ -52,16 +52,27 @@ export function CvCard({
         {score !== undefined && <ScoreRing score={score} size={42} />}
       </div>
 
-      <div className="flex items-center gap-2 mt-2">
+      <div className="flex items-center gap-2 mt-2 w-full">
         <Button
           variant="outline"
           size="sm"
-          className="h-8 text-xs font-medium w-full"
+          className="h-8 text-xs font-medium flex-1"
           asChild
         >
           <Link href={`/cv/${id}/edit`}>
             <Edit3Icon className="mr-1.5 size-3" />
             Ubah CV
+          </Link>
+        </Button>
+        <Button
+          variant="secondary"
+          size="sm"
+          className="h-8 text-xs font-medium flex-1 bg-[#0f2b5c]/10 text-[#0f2b5c] hover:bg-[#0f2b5c]/20 border border-[#0f2b5c]/15"
+          asChild
+        >
+          <Link href={`/cv/${id}/preview`}>
+            <PrinterIcon className="mr-1.5 size-3" />
+            Cetak PDF
           </Link>
         </Button>
       </div>

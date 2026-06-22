@@ -67,6 +67,7 @@ export function JobWorkspace({
     handleGenerateEmailDraft,
     handleSendEmail,
     handleCopyEmail,
+    baseCv,
   } = workspaceState;
 
   const steps = [
@@ -169,6 +170,7 @@ export function JobWorkspace({
               cvSaving={cvSaving}
               handleSaveCv={handleSaveCv}
               handleRunAnalysis={handleRunAnalysis}
+              cvId={baseCv?.id}
               handleNext={() => {
                 setMaxStep(4);
                 setStep(4);

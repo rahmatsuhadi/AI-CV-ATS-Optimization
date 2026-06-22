@@ -6,6 +6,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { getBaseCV, getCVs } from "@/actions/cv";
+import { getJobs } from "@/actions/job";
+import { getEmailTemplates } from "@/actions/email-template";
 import { SectionHeader } from "@/components/atoms/SectionHeader";
 import { CvCard } from "@/components/molecules/CvCard";
 import { JobRow } from "@/components/molecules/JobRow";
@@ -26,36 +28,51 @@ interface DashboardCv {
 export default async function DashboardPage() {
   const baseCvRes = await getBaseCV();
   const cvsRes = await getCVs();
+  const jobsRes = await getJobs();
+  const templatesRes = await getEmailTemplates();
 
   const baseCv = baseCvRes.success ? baseCvRes.data : null;
   const rawCvs = cvsRes.success && cvsRes.data ? cvsRes.data : [];
   const cvs = rawCvs as DashboardCv[];
+  const jobs = jobsRes.success && jobsRes.data ? jobsRes.data : [];
+  const templates = templatesRes.success && templatesRes.data ? templatesRes.data : [];
   const hasBaseCv = !!baseCv;
 
-  const MOCK_STATS = [
+  // Real data calculations
+  const totalCvs = cvs.length;
+  const appliedJobsCount = jobs.filter((j) => j.status !== "draft").length;
+  
+  const jobsWithScore = jobs.filter(
+    (j) => typeof j.ats_score === "number" && j.ats_score > 0
+  );
+  const avgAtsScore = jobsWithScore.length > 0
+    ? Math.round(jobsWithScore.reduce((acc, curr) => acc + (curr.ats_score || 0), 0) / jobsWithScore.length)
+    : null;
+
+  const STATS_DATA = [
     {
       label: "Total CV",
-      value: cvs.length,
+      value: totalCvs,
       icon: FileTextIcon,
-      trend: cvs.length > 0 ? `+${cvs.length} total` : undefined,
+      trend: totalCvs > 0 ? `+${totalCvs} total` : "Belum ada CV",
     },
     {
       label: "Lamaran Terkirim",
-      value: hasBaseCv ? 12 : 0,
+      value: appliedJobsCount,
       icon: BriefcaseIcon,
-      trend: hasBaseCv ? "+3 minggu ini" : undefined,
+      trend: jobs.length > 0 ? `${jobs.length} total lowongan` : "Belum ada lamaran",
     },
     {
       label: "Rata-rata Skor ATS",
-      value: hasBaseCv ? "74" : "-",
+      value: avgAtsScore !== null ? `${avgAtsScore}%` : "-",
       icon: BarChartIcon,
-      trend: hasBaseCv ? "+4% peningkatan" : undefined,
+      trend: jobsWithScore.length > 0 ? `dari ${jobsWithScore.length} analisis` : "Belum ada analisis",
     },
     {
-      label: "Email Terkirim",
-      value: hasBaseCv ? 8 : 0,
+      label: "Templat Email",
+      value: templates.length,
       icon: SendIcon,
-      trend: hasBaseCv ? "80% open rate" : undefined,
+      trend: templates.length > 0 ? `${templates.length} siap dipakai` : "Belum ada templat",
     },
   ];
 
@@ -83,24 +100,25 @@ export default async function DashboardPage() {
     };
   });
 
-  const MOCK_JOBS = hasBaseCv
-    ? [
-        {
-          id: "1",
-          company: "Tokopedia",
-          position: "Senior Frontend Engineer",
-          status: "interview" as const,
-          appliedAt: "Jun 15, 2025",
-        },
-        {
-          id: "2",
-          company: "Gojek",
-          position: "Software Engineer",
-          status: "applied" as const,
-          appliedAt: "Jun 12, 2025",
-        },
-      ]
-    : [];
+  const formattedJobs = jobs.map((job) => {
+    const date = job.applied_at || job.created_at || new Date().toISOString();
+    const formattedDate = new Date(date).toLocaleDateString("id-ID", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    return {
+      id: job.id,
+      company: job.company_name,
+      position: job.position,
+      status: job.status,
+      appliedAt: formattedDate,
+      atsScore: job.ats_score,
+    };
+  });
+
+  const recentJobs = formattedJobs.slice(0, 5);
 
   return (
     <div className="flex flex-col gap-8">
@@ -110,7 +128,7 @@ export default async function DashboardPage() {
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {MOCK_STATS.map((stat) => (
+        {STATS_DATA.map((stat) => (
           <StatCard
             key={stat.label}
             label={stat.label}
@@ -148,10 +166,10 @@ export default async function DashboardPage() {
             title="Pipeline Terkini"
             subtitle="Status lamaran terbaru"
           />
-          {MOCK_JOBS.length > 0 ? (
+          {recentJobs.length > 0 ? (
             <div className="flex flex-col gap-2">
-              {MOCK_JOBS.map((job) => (
-                <JobRow key={job.company + job.position} {...job} />
+              {recentJobs.map((job) => (
+                <JobRow key={job.id} {...job} />
               ))}
             </div>
           ) : (

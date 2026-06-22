@@ -1,6 +1,11 @@
 "use client";
 
-import { ArrowLeftIcon, Loader2Icon, SaveIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  Loader2Icon,
+  PrinterIcon,
+  SaveIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { SectionHeader } from "@/components/atoms/SectionHeader";
 import { Button } from "@/components/ui/button";
@@ -48,14 +53,22 @@ export function CvEditForm({
             title={`Edit CV: ${name}`}
             subtitle="Editor CV berbasis form. Tinjau hasil ekstraksi di bawah."
             action={
-              <Button size="sm" onClick={handleSave} disabled={saving}>
-                {saving ? (
-                  <Loader2Icon className="mr-2 size-4 animate-spin" />
-                ) : (
-                  <SaveIcon className="mr-2 size-4" />
-                )}
-                Simpan Perubahan
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={`/cv/${id}/preview`}>
+                    <PrinterIcon className="mr-2 size-4" />
+                    Pratinjau & PDF
+                  </Link>
+                </Button>
+                <Button size="sm" onClick={handleSave} disabled={saving}>
+                  {saving ? (
+                    <Loader2Icon className="mr-2 size-4 animate-spin" />
+                  ) : (
+                    <SaveIcon className="mr-2 size-4" />
+                  )}
+                  Simpan Perubahan
+                </Button>
+              </div>
             }
           />
         </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   createCV,
@@ -72,6 +72,39 @@ export function useCvTailor(
 
   const [baseCv, setBaseCv] = useState<CvData | null>(null);
   const [cvSaving, setCvSaving] = useState(false);
+
+  // Load existing CV data on mount if we already have a job
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Only load CV on mount or when job ID changes
+  useEffect(() => {
+    async function loadExistingCv() {
+      try {
+        let res = null;
+        if (initialJob?.id) {
+          res = await getTailoredCVForJob(initialJob.id);
+        }
+        if (!res || !res.success || !res.data) {
+          res = await getBaseCV();
+        }
+
+        if (res.success && res.data) {
+          const cv = res.data;
+          setBaseCv(cv);
+          cvForm.setName(cv.name || "Base CV");
+          cvForm.setIsBase(cv.is_base || false);
+
+          const parsedData = parseCvStructuredJson(cv.structured_json);
+          cvForm.setPersonal(parsedData.personal);
+          cvForm.setExperiences(parsedData.experiences);
+          cvForm.setEducations(parsedData.educations);
+          cvForm.setSkillsAchievements(parsedData.skillsAchievements);
+        }
+      } catch (err) {
+        console.error("Failed to auto-load CV on mount:", err);
+      }
+    }
+
+    loadExistingCv();
+  }, [initialJob?.id]);
 
   // Run match analysis & load CV via AI
   const handleRunAnalysis = async () => {
@@ -286,6 +319,7 @@ export function useCvTailor(
     setCvName: cvForm.setName,
     cvIsBase: cvForm.isBase,
     setCvIsBase: cvForm.setIsBase,
+    baseCv,
     ...cvForm,
   };
 }

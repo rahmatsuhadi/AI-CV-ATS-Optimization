@@ -4,9 +4,11 @@ import {
   CheckIcon,
   CircleIcon,
   Loader2Icon,
+  PrinterIcon,
   SaveIcon,
   ScanSearchIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { applyCvSuggestion } from "@/actions/job";
@@ -60,6 +62,7 @@ interface Step3CvTailorProps {
   handleSaveCv: () => void;
   handleRunAnalysis: () => void;
   handleNext: () => void;
+  cvId?: string;
 }
 
 export function Step3CvTailor({
@@ -78,6 +81,7 @@ export function Step3CvTailor({
   handleSaveCv,
   handleRunAnalysis,
   handleNext,
+  cvId,
 }: Step3CvTailorProps) {
   const [applyingKey, setApplyingKey] = useState<string | null>(null);
 
@@ -458,19 +462,34 @@ export function Step3CvTailor({
                 langsung menuju kolomnya.
               </p>
             </div>
-            <Button
-              size="sm"
-              onClick={handleSaveCv}
-              disabled={cvSaving}
-              className="rounded-xl h-9 text-xs font-semibold bg-success hover:bg-success/90 text-success-foreground shadow-sm"
-            >
-              {cvSaving ? (
-                <Loader2Icon className="mr-1.5 size-3.5 animate-spin" />
-              ) : (
-                <SaveIcon className="mr-1.5 size-3.5" />
+            <div className="flex items-center gap-2">
+              {cvId && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="rounded-xl h-9 text-xs font-semibold border-border shadow-sm"
+                >
+                  <Link href={`/cv/${cvId}/preview`}>
+                    <PrinterIcon className="mr-1.5 size-3.5" />
+                    Pratinjau & PDF
+                  </Link>
+                </Button>
               )}
-              Simpan CV
-            </Button>
+              <Button
+                size="sm"
+                onClick={handleSaveCv}
+                disabled={cvSaving}
+                className="rounded-xl h-9 text-xs font-semibold bg-success hover:bg-success/90 text-success-foreground shadow-sm"
+              >
+                {cvSaving ? (
+                  <Loader2Icon className="mr-1.5 size-3.5 animate-spin" />
+                ) : (
+                  <SaveIcon className="mr-1.5 size-3.5" />
+                )}
+                Simpan CV
+              </Button>
+            </div>
           </div>
 
           <Separator />
