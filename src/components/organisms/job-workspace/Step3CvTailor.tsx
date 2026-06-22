@@ -1,10 +1,10 @@
 import {
   AlertTriangleIcon,
+  ArrowRightIcon,
   CircleIcon,
   Loader2Icon,
-  MailIcon,
   SaveIcon,
-  SparklesIcon,
+  ScanSearchIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ScoreRing } from "@/components/atoms/ScoreRing";
@@ -141,16 +141,16 @@ export function Step3CvTailor({
   if (!matchCalculated) {
     return (
       <div className="rounded-2xl border border-border/80 bg-card p-12 shadow-sm text-center flex flex-col items-center justify-center gap-6 min-h-[350px]">
-        <div className="flex size-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-          <SparklesIcon className="size-8" />
+        <div className="flex size-16 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
+          <ScanSearchIcon className="size-8" />
         </div>
         <div className="flex flex-col gap-1.5 max-w-md">
           <h3 className="font-heading text-xl font-bold">
-            Mulai Analisis & Pencocokan CV
+            Analisis & Pencocokan CV
           </h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            AI akan membandingkan detail persyaratan lowongan dengan Base CV
-            kamu untuk menghitung kecocokan ATS dan memberikan saran perbaikan.
+            Sistem akan membandingkan persyaratan lowongan dengan Base CV kamu
+            untuk menghitung kecocokan ATS dan memberikan saran perbaikan.
           </p>
         </div>
         <Button
@@ -160,12 +160,13 @@ export function Step3CvTailor({
         >
           {loadingMatch ? (
             <>
-              <Loader2Icon className="mr-2 size-4 animate-spin" /> Menghubungkan
-              CV & Menganalisis...
+              <Loader2Icon className="mr-2 size-4 animate-spin" /> Menganalisis
+              CV...
             </>
           ) : (
             <>
-              Mulai Analisis Kecocokan <SparklesIcon className="ml-2 size-4" />
+              <ScanSearchIcon className="mr-2 size-4" /> Mulai Analisis
+              Kecocokan
             </>
           )}
         </Button>
@@ -176,13 +177,13 @@ export function Step3CvTailor({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-in fade-in duration-300">
       {/* LEFT PANEL: ANALYSIS & SUGGESTIONS */}
-      <div className="flex flex-col gap-6 lg:col-span-5">
-        <div className="flex flex-col gap-5 rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+      <div className="flex flex-col gap-6 lg:col-span-5 min-w-0">
+        <div className="flex flex-col gap-5 rounded-2xl border border-border/60 bg-card p-6 shadow-sm overflow-hidden">
           <div className="flex items-center gap-5">
             <ScoreRing score={matchScore} size={84} />
             <div className="flex flex-col">
               <span className="font-heading text-xl font-bold tracking-tight">
-                Match Score
+                Skor Kecocokan
               </span>
               <span className="text-[13px] text-muted-foreground leading-relaxed">
                 {matchScore >= 80
@@ -199,12 +200,12 @@ export function Step3CvTailor({
           {/* Keyword Analysis Tags */}
           <div className="flex flex-col gap-3">
             <span className="font-heading text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Analisis Kata Kunci (Keywords)
+              Analisis Kata Kunci
             </span>
 
             <div className="flex flex-col gap-2">
               <span className="text-xs font-medium text-success flex items-center gap-1.5">
-                ✓ Cocok ({matchedKeywords.length})
+                ✓ Sesuai ({matchedKeywords.length})
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {matchedKeywords.map((kw) => (
@@ -220,7 +221,7 @@ export function Step3CvTailor({
 
             <div className="flex flex-col gap-2 mt-1">
               <span className="text-xs font-medium text-danger flex items-center gap-1.5">
-                ✗ Kurang ({missingKeywords.length})
+                ✗ Belum ada ({missingKeywords.length})
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {missingKeywords.map((kw) => (
@@ -236,7 +237,7 @@ export function Step3CvTailor({
           </div>
 
           <Separator />
- 
+
           {/* Dealbreaker Alerts List */}
           {alerts.length > 0 && (
             <div className="flex flex-col gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4 animate-in slide-in-from-top-3 duration-300">
@@ -246,13 +247,21 @@ export function Step3CvTailor({
               </div>
               <div className="flex flex-col gap-2">
                 {alerts.map((al) => (
-                  <div key={al.title + al.message} className="text-xs text-foreground/90 leading-relaxed pl-2 border-l-2 border-amber-500">
-                    <strong className="font-semibold text-foreground">{al.title}:</strong> {al.message}
+                  <div
+                    key={al.title + al.message}
+                    className="text-xs text-foreground/90 leading-relaxed pl-2 border-l-2 border-amber-500"
+                  >
+                    <strong className="font-semibold text-foreground">
+                      {al.title}:
+                    </strong>{" "}
+                    {al.message}
                   </div>
                 ))}
               </div>
               <p className="text-[10px] text-muted-foreground leading-normal italic mt-1.5">
-                * Peringatan ini mendeteksi persyaratan mutlak yang tidak tertera di CV kamu. Silakan sesuaikan CV jika memang kamu memilikinya, agar tidak gugur di filter awal.
+                * Peringatan ini mendeteksi persyaratan mutlak yang tidak
+                tertera di CV kamu. Silakan sesuaikan CV jika memang kamu
+                memilikinya, agar tidak gugur di filter awal.
               </p>
             </div>
           )}
@@ -262,7 +271,7 @@ export function Step3CvTailor({
           {/* Suggestions List */}
           <div className="flex flex-col gap-3">
             <span className="font-heading text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Actionable Suggestions (Klik untuk sorot)
+              Saran Perbaikan (klik untuk sorot)
             </span>
 
             <div className="flex flex-col gap-2.5 max-h-[300px] overflow-y-auto pr-1">
@@ -309,8 +318,8 @@ export function Step3CvTailor({
       </div>
 
       {/* RIGHT PANEL: IN-PLACE CV EDITOR */}
-      <div className="flex flex-col lg:col-span-7">
-        <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm flex flex-col gap-5">
+      <div className="flex flex-col lg:col-span-7 min-w-0">
+        <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm flex flex-col gap-5 overflow-hidden">
           <div className="flex items-center justify-between mb-1">
             <div className="flex flex-col gap-0.5">
               <h3 className="font-heading text-lg font-bold tracking-tight">
@@ -349,25 +358,25 @@ export function Step3CvTailor({
                 value="personal"
                 className="rounded-lg py-2 text-xs font-medium"
               >
-                Personal Info
+                Info Pribadi
               </TabsTrigger>
               <TabsTrigger
                 value="experience"
                 className="rounded-lg py-2 text-xs font-medium"
               >
-                Experience
+                Pengalaman
               </TabsTrigger>
               <TabsTrigger
                 value="education"
                 className="rounded-lg py-2 text-xs font-medium"
               >
-                Education
+                Pendidikan
               </TabsTrigger>
               <TabsTrigger
                 value="skills-others"
                 className="rounded-lg py-2 text-xs font-medium"
               >
-                Skills & Others
+                Keahlian & Lainnya
               </TabsTrigger>
             </TabsList>
 
@@ -444,13 +453,12 @@ export function Step3CvTailor({
           </Tabs>
         </div>
 
-        {/* Navigation buttons */}
         <div className="flex justify-end items-center border-t border-border/40 pt-5 mt-6">
           <Button
             onClick={handleNext}
             className="rounded-xl bg-primary hover:bg-primary/95 text-primary-foreground px-6 py-2 shadow-sm font-semibold animate-in zoom-in-95 duration-300"
           >
-            Lanjut ke Email Lamaran <MailIcon className="ml-2 size-4" />
+            Lanjut ke Email Lamaran <ArrowRightIcon className="ml-2 size-4" />
           </Button>
         </div>
       </div>

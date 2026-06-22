@@ -30,25 +30,25 @@ export default async function DashboardPage() {
 
   const MOCK_STATS = [
     {
-      label: "Total CVs",
+      label: "Total CV",
       value: cvs.length,
       icon: FileTextIcon,
       trend: cvs.length > 0 ? `+${cvs.length} total` : undefined,
     },
     {
-      label: "Jobs Applied",
+      label: "Lamaran Terkirim",
       value: hasBaseCv ? 12 : 0,
       icon: BriefcaseIcon,
-      trend: hasBaseCv ? "+3 this week" : undefined,
+      trend: hasBaseCv ? "+3 minggu ini" : undefined,
     },
     {
-      label: "Avg. ATS Score",
+      label: "Rata-rata Skor ATS",
       value: hasBaseCv ? "74" : "-",
       icon: BarChartIcon,
-      trend: hasBaseCv ? "+4% increase" : undefined,
+      trend: hasBaseCv ? "+4% peningkatan" : undefined,
     },
     {
-      label: "Emails Sent",
+      label: "Email Terkirim",
       value: hasBaseCv ? 8 : 0,
       icon: SendIcon,
       trend: hasBaseCv ? "80% open rate" : undefined,
@@ -61,7 +61,7 @@ export default async function DashboardPage() {
     const timeDiff = Math.abs(Date.now() - date.getTime());
     const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     const formattedDate =
-      diffDays <= 1 ? "Updated recently" : `Updated ${diffDays} days ago`;
+      diffDays <= 1 ? "Baru saja diperbarui" : `Diperbarui ${diffDays} hari lalu`;
 
     return {
       id: cv.id,
@@ -93,8 +93,8 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-col gap-8">
       <SectionHeader
-        title="Dashboard"
-        subtitle="Workplace overview, ATS analytics, and track status."
+        title="Dasbor"
+        subtitle="Ringkasan workspace, analitik ATS, dan status lamaran."
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -112,8 +112,8 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div className="flex flex-col gap-4">
           <SectionHeader
-            title="My CV Profiles"
-            subtitle="Manage and tailor versions"
+            title="CV Saya"
+            subtitle="Kelola dan sesuaikan versi CV"
           />
           {formattedCvs.length > 0 ? (
             <div className="flex flex-col gap-3">
@@ -123,9 +123,9 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-muted/20 p-8 text-center">
-              <p className="text-sm font-medium">No CV found</p>
+              <p className="text-sm font-medium">Belum ada CV</p>
               <Button size="sm" variant="outline" className="mt-4" asChild>
-                <Link href="/cv">Upload or Build CV</Link>
+                <Link href="/cv">Upload atau Buat CV</Link>
               </Button>
             </div>
           )}
@@ -133,8 +133,8 @@ export default async function DashboardPage() {
 
         <div className="flex flex-col gap-4">
           <SectionHeader
-            title="Recent Pipeline"
-            subtitle="Latest tracker statuses"
+            title="Pipeline Terkini"
+            subtitle="Status lamaran terbaru"
           />
           {MOCK_JOBS.length > 0 ? (
             <div className="flex flex-col gap-2">
@@ -144,9 +144,9 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-muted/20 p-8 text-center">
-              <p className="text-sm font-medium">No active applications</p>
+              <p className="text-sm font-medium">Belum ada lamaran aktif</p>
               <Button size="sm" variant="outline" className="mt-4" asChild>
-                <Link href="/job/new">Add Application</Link>
+                <Link href="/job/new">Tambah Lamaran</Link>
               </Button>
             </div>
           )}

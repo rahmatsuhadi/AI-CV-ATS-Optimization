@@ -34,7 +34,7 @@ export function Topbar({ userEmail }: { userEmail?: string }) {
           onClick={handleLogout}
           className="text-xs hover:bg-danger/10 hover:text-danger"
         >
-          Logout
+          Keluar
         </Button>
       </div>
     </header>

@@ -230,7 +230,10 @@ Return ONLY valid JSON. Do not include markdown formatting like \`\`\`json.`;
       model: "gemini/gemini-3.1-flash-lite-preview",
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: `Here is the raw job description:\n\n${rawText}` },
+        {
+          role: "user",
+          content: `Here is the raw job description:\n\n${rawText}`,
+        },
       ],
     });
 
@@ -242,11 +245,13 @@ Return ONLY valid JSON. Do not include markdown formatting like \`\`\`json.`;
 
     let jsonText = aiResponseContent.trim();
     if (jsonText.startsWith("```")) {
-      jsonText = jsonText.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+      jsonText = jsonText
+        .replace(/^```(?:json)?\n?/, "")
+        .replace(/\n?```$/, "");
     }
 
     const parsedData = JSON.parse(jsonText.trim());
-    
+
     // Wrap the extracted markdown string inside a string[] array to maintain schema compatibility
     const requirementsArray = parsedData.requirements_markdown
       ? [parsedData.requirements_markdown]
@@ -347,7 +352,9 @@ Return ONLY valid JSON. Do not include markdown formatting like \`\`\`json.`;
 
     let jsonText = aiResponseContent.trim();
     if (jsonText.startsWith("```")) {
-      jsonText = jsonText.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+      jsonText = jsonText
+        .replace(/^```(?:json)?\n?/, "")
+        .replace(/\n?```$/, "");
     }
 
     const parsedData = JSON.parse(jsonText.trim());

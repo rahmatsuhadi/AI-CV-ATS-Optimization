@@ -75,10 +75,10 @@ export function JobWorkspace({ initialJob }: JobWorkspaceProps) {
   } = useJobWorkspace(initialJob);
 
   const steps = [
-    { number: 1, label: "1: Input Plan" },
-    { number: 2, label: "2: Preview Extract" },
-    { number: 3, label: "3: CV Tailor & Match" },
-    { number: 4, label: "4: Email Application" },
+    { number: 1, label: "1: Input Lowongan" },
+    { number: 2, label: "2: Pratinjau Ekstrak" },
+    { number: 3, label: "3: Sesuaikan CV" },
+    { number: 4, label: "4: Kirim Email" },
   ];
 
   return (

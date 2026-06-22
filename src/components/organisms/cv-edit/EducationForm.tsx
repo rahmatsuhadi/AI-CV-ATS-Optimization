@@ -46,7 +46,7 @@ export function EducationForm({
           </Button>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="flex flex-col gap-1.5">
-              <Label>Institution</Label>
+              <Label>Institusi / Universitas</Label>
               <Input
                 value={edu.institution}
                 placeholder="e.g. Universitas AMIKOM Yogyakarta"
@@ -56,7 +56,7 @@ export function EducationForm({
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label>Degree / Major</Label>
+              <Label>Gelar / Jurusan</Label>
               <Input
                 value={edu.degree}
                 placeholder="e.g. D3 Teknik Informatika"
@@ -66,7 +66,7 @@ export function EducationForm({
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label>Duration</Label>
+              <Label>Durasi</Label>
               <Input
                 value={edu.duration}
                 placeholder="e.g. Sep 2023 - Feb 2026"
@@ -78,7 +78,7 @@ export function EducationForm({
           </div>
           <div className="flex flex-col gap-2">
             <Label className="font-semibold text-primary">
-              Academic Details / Sub-points (Points)
+              Detail Akademik / Sub-poin
             </Label>
             <div className="flex flex-col gap-2">
               {edu.bullets.map((bullet, bulletIdx) => (
@@ -119,14 +119,14 @@ export function EducationForm({
               className="mt-1.5 self-start"
             >
               <PlusIcon className="mr-1.5 size-3.5" />
-              Add Bullet Point
+              Tambah Poin
             </Button>
           </div>
         </div>
       ))}
       {educations.length === 0 && (
         <span className="text-sm text-muted-foreground text-center mb-4">
-          No education entries found.
+          Belum ada data pendidikan.
         </span>
       )}
       <Button
@@ -135,7 +135,7 @@ export function EducationForm({
         onClick={addEducation}
       >
         <PlusIcon className="mr-2 size-4" />
-        Add Education Entry
+        Tambah Pendidikan
       </Button>
     </div>
   );

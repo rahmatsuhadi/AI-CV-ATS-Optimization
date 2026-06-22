@@ -13,18 +13,17 @@ export default function MarketingLayout({
         <Logo />
         <nav className="flex items-center gap-3">
           <Button variant="ghost" size="sm" className="text-xs" asChild>
-            <Link href="/login">Log in</Link>
+            <Link href="/login">Masuk</Link>
           </Button>
           <Button size="sm" className="text-xs" asChild>
-            <Link href="/register">Get Started</Link>
+            <Link href="/register">Daftar</Link>
           </Button>
         </nav>
       </header>
       <main className="flex-1">{children}</main>
       <footer className="border-t border-border/60 py-10 text-center">
         <p className="font-mono text-[11px] text-muted-foreground tracking-wider">
-          {new Date().getFullYear()} CV Optimizer AI — built for modern job
-          seekers
+          {new Date().getFullYear()} mbuh-job — dibuat untuk pencari kerja modern
         </p>
       </footer>
     </div>

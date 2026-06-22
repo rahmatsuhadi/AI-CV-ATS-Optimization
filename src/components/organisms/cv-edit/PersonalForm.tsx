@@ -1,3 +1,4 @@
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -30,7 +31,7 @@ export function PersonalForm({
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 border-b border-border/60 pb-4 mb-2">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="cvName" className="font-semibold text-primary">
-            CV Document Name
+            Nama Dokumen CV
           </Label>
           <Input
             id="cvName"
@@ -40,22 +41,20 @@ export function PersonalForm({
           />
         </div>
         <div className="flex items-center gap-2 pt-6">
-          <input
-            type="checkbox"
+          <Checkbox
             id="isBase"
             checked={isBase}
-            onChange={(e) => setIsBase(e.target.checked)}
-            className="rounded border-border size-4 accent-primary cursor-pointer"
+            onCheckedChange={(checked) => setIsBase(checked === true)}
           />
           <Label htmlFor="isBase" className="cursor-pointer font-medium">
-            Set as Base CV (untuk tracking utama)
+            Jadikan sebagai CV Utama (untuk tracking)
           </Label>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="name">Full Name</Label>
+          <Label htmlFor="name">Nama Lengkap</Label>
           <Input
             id="name"
             value={personal.name}
@@ -75,7 +74,7 @@ export function PersonalForm({
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="phone">Phone Number</Label>
+          <Label htmlFor="phone">Nomor Telepon</Label>
           <Input
             id="phone"
             value={personal.phone}
@@ -83,7 +82,7 @@ export function PersonalForm({
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location">Lokasi</Label>
           <Input
             id="location"
             placeholder="e.g. Bantul, Yogyakarta"
@@ -92,7 +91,7 @@ export function PersonalForm({
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="linkedin">LinkedIn URL</Label>
+          <Label htmlFor="linkedin">URL LinkedIn</Label>
           <Input
             id="linkedin"
             placeholder="e.g. linkedin.com/in/rahmat-suhadi"
@@ -103,7 +102,7 @@ export function PersonalForm({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="website">Website / Portfolio URL</Label>
+        <Label htmlFor="website">Website / URL Portofolio</Label>
         <Input
           id="website"
           placeholder="e.g. https://mattz.my.id"
@@ -113,7 +112,7 @@ export function PersonalForm({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="summary">Professional Summary</Label>
+        <Label htmlFor="summary">Ringkasan Profesional</Label>
         <Textarea
           id="summary"
           rows={4}

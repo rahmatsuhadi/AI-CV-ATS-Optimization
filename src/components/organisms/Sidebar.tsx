@@ -10,10 +10,10 @@ import { Logo } from "@/components/atoms/Logo";
 import { SidebarNavItem } from "@/components/molecules/SidebarNavItem";
 
 const NAV = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboardIcon },
-  { href: "/cv", label: "My CVs", icon: FileTextIcon },
-  { href: "/job", label: "Job Tracker", icon: BriefcaseIcon },
-  { href: "/email-templates", label: "Email Templates", icon: MailIcon },
+  { href: "/dashboard", label: "Dasbor", icon: LayoutDashboardIcon },
+  { href: "/cv", label: "CV Saya", icon: FileTextIcon },
+  { href: "/job", label: "Pelacak Lamaran", icon: BriefcaseIcon },
+  { href: "/email-templates", label: "Template Email", icon: MailIcon },
 ];
 
 export function Sidebar() {
@@ -25,7 +25,7 @@ export function Sidebar() {
 
       <nav className="flex flex-col gap-0.5">
         <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/50">
-          Workspace
+          Navigasi
         </p>
         {NAV.map((item) => (
           <SidebarNavItem key={item.href} {...item} />
@@ -34,9 +34,9 @@ export function Sidebar() {
 
       <div className="mt-auto">
         <div className="rounded-xl border border-border/60 bg-muted/40 p-4">
-          <p className="text-xs font-semibold text-foreground">Phase 1 — MVP</p>
+          <p className="text-xs font-semibold text-foreground">Fase 1 — MVP</p>
           <p className="mt-1 text-[11px] text-muted-foreground leading-relaxed">
-            Parsing & analysis enabled. Export coming soon.
+            Parsing & analisis aktif. Ekspor segera hadir.
           </p>
           <div className="mt-3 h-1.5 rounded-full bg-border overflow-hidden">
             <div className="h-full w-1/3 rounded-full bg-primary" />

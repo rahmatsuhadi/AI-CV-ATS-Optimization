@@ -35,7 +35,11 @@ export default async function JobPage() {
         title="Job Tracker"
         subtitle="Kelola pipeline lamaran kerja dan tindak lanjut (CRM Karir)."
         action={
-          <Button size="sm" className="rounded-xl shadow-md font-semibold bg-primary hover:bg-primary/95 text-primary-foreground" asChild>
+          <Button
+            size="sm"
+            className="rounded-xl shadow-md font-semibold bg-primary hover:bg-primary/95 text-primary-foreground"
+            asChild
+          >
             <Link href="/job/new">
               <PlusIcon className="mr-2 size-4" />
               Add Application
@@ -70,18 +74,27 @@ export default async function JobPage() {
                 company={job.company_name}
                 position={job.position}
                 status={job.status}
-                appliedAt={formatDate(job.applied_at || (job as any).created_at)}
+                appliedAt={formatDate(
+                  job.applied_at || (job as any).created_at,
+                )}
               />
             ))
           ) : (
             <div className="text-center p-16 border border-dashed border-border/80 rounded-2xl bg-muted/5 flex flex-col gap-4 items-center justify-center min-h-[220px]">
               <div className="flex flex-col gap-1.5 max-w-sm">
-                <p className="text-sm font-semibold text-foreground">Belum ada lamaran pekerjaan</p>
+                <p className="text-sm font-semibold text-foreground">
+                  Belum ada lamaran pekerjaan
+                </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Ekstrak informasi lowongan kerja pertamamu dan track kualifikasinya bersama AI di sini.
+                  Ekstrak informasi lowongan kerja pertamamu dan track
+                  kualifikasinya bersama AI di sini.
                 </p>
               </div>
-              <Button size="sm" className="rounded-xl font-semibold mt-2 bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm" asChild>
+              <Button
+                size="sm"
+                className="rounded-xl font-semibold mt-2 bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm"
+                asChild
+              >
                 <Link href="/job/new">
                   <PlusIcon className="mr-1.5 size-4" /> Tambah Lamaran Baru
                 </Link>

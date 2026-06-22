@@ -32,10 +32,10 @@ export function LoginForm() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1.5 text-center">
         <h2 className="font-heading text-xl font-bold tracking-tight">
-          Sign In
+          Masuk ke Akun
         </h2>
         <p className="text-xs text-muted-foreground">
-          Enter credentials to access CV workspace
+          Masukkan kredensial untuk mengakses workspace CV kamu
         </p>
       </div>
 
@@ -47,20 +47,20 @@ export function LoginForm() {
         )}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email" className="text-xs text-muted-foreground">
-            Email address
+            Alamat Email
           </Label>
           <Input
             id="email"
             name="email"
             type="email"
-            placeholder="workspace@org.com"
+            placeholder="nama@organisasi.com"
             className="h-10 rounded-xl shadow-none"
             required
           />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="password" className="text-xs text-muted-foreground">
-            Password
+            Kata Sandi
           </Label>
           <Input
             id="password"
@@ -76,17 +76,17 @@ export function LoginForm() {
           className="w-full h-10 rounded-xl mt-2"
           disabled={isPending}
         >
-          {isPending ? "Signing in..." : "Sign In"}
+          {isPending ? "Sedang masuk..." : "Masuk"}
         </Button>
       </form>
 
       <div className="text-center text-xs text-muted-foreground">
-        Need an account?{" "}
+        Belum punya akun?{" "}
         <Link
           href="/register"
           className="underline hover:text-primary font-medium"
         >
-          Register
+          Daftar sekarang
         </Link>
       </div>
     </div>

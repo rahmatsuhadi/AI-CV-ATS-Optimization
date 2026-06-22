@@ -24,11 +24,11 @@ const dotColors: Record<StatusBadgeVariant, string> = {
 };
 
 const labels: Record<StatusBadgeVariant, string> = {
-  draft: "Draft",
-  applied: "Applied",
-  interview: "Interview",
-  offer: "Offer",
-  rejected: "Rejected",
+  draft: "Draf",
+  applied: "Melamar",
+  interview: "Wawancara",
+  offer: "Penawaran",
+  rejected: "Ditolak",
 };
 
 interface StatusBadgeProps {

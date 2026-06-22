@@ -59,7 +59,7 @@ export function CvList({ cvs }: CvListProps) {
               ) : (
                 <PlusIcon className="mr-2 size-4" />
               )}
-              Build from Scratch
+              Buat dari Awal
             </Button>
           </div>
         }
@@ -95,11 +95,11 @@ export function CvList({ cvs }: CvListProps) {
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-muted/20 p-12 text-center">
           <UploadIcon className="mb-4 size-10 text-muted-foreground" />
           <p className="font-heading text-lg font-semibold tracking-tight">
-            No CV uploaded yet
+            Belum ada CV yang diunggah
           </p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Get started by uploading your existing resume or creating one from
-            scratch to unlock AI tailoring.
+            Mulai dengan mengunggah resume yang ada atau buat baru dari awal
+            untuk membuka fitur penyesuaian CV.
           </p>
           <div className="mt-6 flex gap-3">
             <Button
@@ -117,7 +117,7 @@ export function CvList({ cvs }: CvListProps) {
               disabled={actionLoading}
               className="rounded-xl shadow-md"
             >
-              Build from Scratch
+              Buat dari Awal
             </Button>
           </div>
         </div>

@@ -2,6 +2,13 @@ import { PlusIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { SkillAchievementItem } from "@/types/cv";
 
@@ -64,60 +71,62 @@ export function SkillsOthersForm({
                 <Label className="font-semibold text-sm">
                   Kategori / Proyek / Aktivitas
                 </Label>
-                <select
+                <Select
                   value={
                     isCustomCategory || item.category === ""
                       ? "Custom"
                       : item.category
                   }
-                  onChange={(e) => {
-                    const val = e.target.value;
+                  onValueChange={(val) => {
                     if (val === "Custom") {
-                      updateSkillAchievement(index, {
-                        category: "",
-                      });
+                      updateSkillAchievement(index, { category: "" });
                     } else {
-                      updateSkillAchievement(index, {
-                        category: val,
-                      });
+                      updateSkillAchievement(index, { category: val });
                     }
                   }}
-                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer text-foreground bg-background"
                 >
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                  <option value="Custom">+ Tulis Kategori Kustom</option>
-                </select>
+                  <SelectTrigger className="h-9 w-full">
+                    <SelectValue placeholder="Pilih kategori..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                    <SelectItem value="Custom">
+                      + Tulis Kategori Kustom
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
                 <p className="text-[11px] text-muted-foreground">
                   Tuliskan nama/judul jika mengindikasikan proyek/kegiatan.
                 </p>
               </div>
 
-              {/* Tahun Select */}
               <div className="flex flex-col gap-1.5">
                 <Label className="font-semibold text-sm">Tahun</Label>
-                <select
-                  value={item.year}
-                  onChange={(e) =>
-                    updateSkillAchievement(index, {
-                      year: e.target.value,
-                    })
+                <Select
+                  value={item.year || ""}
+                  onValueChange={(val) =>
+                    updateSkillAchievement(index, { year: val })
                   }
-                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer text-foreground bg-background"
                 >
-                  <option value="">Select year (optional)</option>
-                  {Array.from({ length: 15 }, (_, i) => {
-                    const yearVal = String(new Date().getFullYear() + 4 - i);
-                    return (
-                      <option key={yearVal} value={yearVal}>
-                        {yearVal}
-                      </option>
-                    );
-                  })}
-                </select>
+                  <SelectTrigger className="h-9 w-full">
+                    <SelectValue placeholder="Select year (optional)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Select year (optional)</SelectItem>
+                    {Array.from({ length: 15 }, (_, i) => {
+                      const yearVal = String(new Date().getFullYear() + 4 - i);
+                      return (
+                        <SelectItem key={yearVal} value={yearVal}>
+                          {yearVal}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
                 <p className="text-[11px] text-muted-foreground">
                   Hanya dibutuhkan apabila memilih Proyek / Pencapaian.
                 </p>

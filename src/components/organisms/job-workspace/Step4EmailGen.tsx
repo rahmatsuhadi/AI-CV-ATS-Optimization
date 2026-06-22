@@ -2,6 +2,13 @@ import { DownloadIcon, MailIcon, RefreshCwIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -63,18 +70,24 @@ export function Step4EmailGen({
               >
                 Pilih Template Email
               </Label>
-              <select
-                id="templateSelect"
+              <Select
                 value={selectedTemplateId}
-                onChange={(e) => setSelectedTemplateId(e.target.value)}
-                className="flex h-9 w-full rounded-xl border border-border/80 bg-background px-3 py-1.5 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer text-foreground"
+                onValueChange={setSelectedTemplateId}
               >
-                {templates.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger
+                  id="templateSelect"
+                  className="h-9 w-full rounded-xl"
+                >
+                  <SelectValue placeholder="Pilih template..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {templates.map((t) => (
+                    <SelectItem key={t.id} value={t.id}>
+                      {t.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <Button
@@ -85,10 +98,9 @@ export function Step4EmailGen({
               Generate / Refresh Email Draft
             </Button>
 
-            {/* Attachment Card View */}
             <div className="rounded-xl border border-border/60 bg-muted/20 p-4 mt-2 flex flex-col gap-3">
               <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                   <DownloadIcon className="size-5" />
                 </div>
                 <div className="flex flex-col">
@@ -102,8 +114,8 @@ export function Step4EmailGen({
               </div>
               <Separator className="bg-border/60" />
               <span className="text-[10px] text-muted-foreground leading-relaxed">
-                💡 CV diselaraskan otomatis dengan data yang kamu edit pada Step
-                3 sebelumnya.
+                CV akan diselaraskan otomatis dengan data yang kamu edit pada
+                Step 3.
               </span>
             </div>
           </div>
@@ -160,13 +172,13 @@ export function Step4EmailGen({
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-[350px] border border-dashed border-border/80 rounded-xl bg-muted/10 text-center px-8">
-                <MailIcon className="size-10 text-muted-foreground/50 mb-4 animate-pulse" />
+                <MailIcon className="size-10 text-muted-foreground/50 mb-4" />
                 <p className="font-heading text-sm font-semibold">
-                  Gagal memuat template email
+                  Draft email belum dibuat
                 </p>
                 <p className="text-xs text-muted-foreground mt-1 max-w-[250px]">
-                  Klik tombol generate di kiri untuk memaksa AI menghasilkan
-                  surat lamaran.
+                  Pilih template di kiri lalu klik tombol Generate untuk membuat
+                  draft surat lamaran kamu.
                 </p>
               </div>
             )}
@@ -182,8 +194,8 @@ export function Step4EmailGen({
           >
             Kembali ke Analisis
           </Button>
-          <div className="text-xs text-muted-foreground font-medium italic">
-            💡 Flow Selesai! Kamu siap mengirim lamaran kamu 🚀
+          <div className="text-xs text-muted-foreground font-medium">
+            Flow selesai — kamu siap mengirim lamaran.
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Loader2Icon, SparklesIcon } from "lucide-react";
+import { Loader2Icon, ScanTextIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -61,8 +61,7 @@ export function Step1InputPlan({
                 </>
               ) : (
                 <>
-                  <SparklesIcon className="mr-2 size-4" /> Analisis & Ekstrak
-                  Data
+                  <ScanTextIcon className="mr-2 size-4" /> Ekstrak Data
                 </>
               )}
             </Button>

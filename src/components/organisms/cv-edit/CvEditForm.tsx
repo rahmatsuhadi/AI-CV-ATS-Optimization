@@ -73,7 +73,7 @@ export function CvEditForm({
         </Button>
         <SectionHeader
           title={`Edit CV: ${name}`}
-          subtitle="Form-based ATS friendly editor. Review AI extractions below."
+          subtitle="Editor CV berbasis form. Tinjau hasil ekstraksi di bawah."
           action={
             <Button size="sm" onClick={handleSave} disabled={saving}>
               {saving ? (
@@ -81,7 +81,7 @@ export function CvEditForm({
               ) : (
                 <SaveIcon className="mr-2 size-4" />
               )}
-              Save Changes
+              Simpan Perubahan
             </Button>
           }
         />
@@ -90,16 +90,16 @@ export function CvEditForm({
       <Tabs value={tab} onValueChange={setTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto gap-1">
           <TabsTrigger value="personal" className="py-2.5">
-            Personal Info
+            Info Pribadi
           </TabsTrigger>
           <TabsTrigger value="experience" className="py-2.5">
-            Experience
+            Pengalaman
           </TabsTrigger>
           <TabsTrigger value="education" className="py-2.5">
-            Education
+            Pendidikan
           </TabsTrigger>
           <TabsTrigger value="skills-others" className="py-2.5">
-            Skills & Others
+            Keahlian & Lainnya
           </TabsTrigger>
         </TabsList>
 

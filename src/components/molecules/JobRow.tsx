@@ -38,12 +38,16 @@ export function JobRow({
 
   const handleStatusChange = async (newStatus: JobStatus) => {
     setStatus(newStatus);
-    const toastId = toast.loading(`Mengubah status lamaran menjadi ${newStatus}...`);
+    const toastId = toast.loading(
+      `Mengubah status lamaran menjadi ${newStatus}...`,
+    );
     try {
       const res = await updateJob(id, { status: newStatus });
       toast.dismiss(toastId);
       if (res.success) {
-        toast.success(`Status lamaran ${company} berhasil diubah ke ${newStatus}!`);
+        toast.success(
+          `Status lamaran ${company} berhasil diubah ke ${newStatus}!`,
+        );
       } else {
         toast.error(res.error || "Gagal memperbarui status.");
         setStatus(initialStatus);
@@ -85,21 +89,18 @@ export function JobRow({
           {appliedAt}
         </p>
 
-        <Select
-          value={status}
-          onValueChange={handleStatusChange}
-        >
+        <Select value={status} onValueChange={handleStatusChange}>
           <SelectTrigger className="h-8 w-[120px] rounded-lg text-xs shadow-none border-border/60 focus:ring-0 focus:ring-offset-0">
             <SelectValue>
               <StatusBadge status={status} />
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="draft">Draft</SelectItem>
-            <SelectItem value="applied">Applied</SelectItem>
-            <SelectItem value="interview">Interview</SelectItem>
-            <SelectItem value="offer">Offer</SelectItem>
-            <SelectItem value="rejected">Rejected</SelectItem>
+            <SelectItem value="draft">Draf</SelectItem>
+            <SelectItem value="applied">Melamar</SelectItem>
+            <SelectItem value="interview">Wawancara</SelectItem>
+            <SelectItem value="offer">Penawaran</SelectItem>
+            <SelectItem value="rejected">Ditolak</SelectItem>
           </SelectContent>
         </Select>
 

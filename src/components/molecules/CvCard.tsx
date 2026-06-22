@@ -49,7 +49,7 @@ export function CvCard({
         >
           <Link href={`/cv/${id}/edit`}>
             <Edit3Icon className="mr-1.5 size-3" />
-            Edit Builder
+            Ubah CV
           </Link>
         </Button>
       </div>

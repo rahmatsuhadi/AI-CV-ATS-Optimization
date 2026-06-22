@@ -33,10 +33,10 @@ export function RegisterForm() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1.5 text-center">
         <h2 className="font-heading text-xl font-bold tracking-tight">
-          Create Account
+          Buat Akun Baru
         </h2>
         <p className="text-xs text-muted-foreground">
-          Get started with your CV workspace
+          Mulai kelola lamaran kerja dan CV kamu
         </p>
       </div>
 
@@ -48,20 +48,20 @@ export function RegisterForm() {
         )}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email" className="text-xs text-muted-foreground">
-            Email address
+            Alamat Email
           </Label>
           <Input
             id="email"
             name="email"
             type="email"
-            placeholder="workspace@org.com"
+            placeholder="nama@organisasi.com"
             className="h-10 rounded-xl shadow-none"
             required
           />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="password" className="text-xs text-muted-foreground">
-            Password
+            Kata Sandi
           </Label>
           <Input
             id="password"
@@ -77,17 +77,17 @@ export function RegisterForm() {
           className="w-full h-10 rounded-xl mt-2"
           disabled={isPending}
         >
-          {isPending ? "Creating account..." : "Create Account"}
+          {isPending ? "Membuat akun..." : "Daftar Sekarang"}
         </Button>
       </form>
 
       <div className="text-center text-xs text-muted-foreground">
-        Already have an account?{" "}
+        Sudah punya akun?{" "}
         <Link
           href="/login"
           className="underline hover:text-primary font-medium"
         >
-          Sign in
+          Masuk
         </Link>
       </div>
     </div>

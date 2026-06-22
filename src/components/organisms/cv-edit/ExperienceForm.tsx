@@ -46,7 +46,7 @@ export function ExperienceForm({
           </Button>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <div className="flex flex-col gap-1.5">
-              <Label>Company</Label>
+              <Label>Perusahaan</Label>
               <Input
                 value={exp.company}
                 onChange={(e) =>
@@ -55,7 +55,7 @@ export function ExperienceForm({
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label>Location</Label>
+              <Label>Lokasi</Label>
               <Input
                 value={exp.location}
                 placeholder="e.g. Subang, Jawa Barat"
@@ -65,7 +65,7 @@ export function ExperienceForm({
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label>Position</Label>
+              <Label>Posisi / Jabatan</Label>
               <Input
                 value={exp.position}
                 onChange={(e) =>
@@ -74,7 +74,7 @@ export function ExperienceForm({
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label>Duration</Label>
+              <Label>Durasi</Label>
               <Input
                 value={exp.duration}
                 placeholder="e.g. Jan 2019 - Apr 2019"
@@ -86,7 +86,7 @@ export function ExperienceForm({
           </div>
           <div className="flex flex-col gap-2">
             <Label className="font-semibold text-primary">
-              Responsibilities & Achievements (Points)
+              Tanggung Jawab & Pencapaian (Poin-poin)
             </Label>
             <div className="flex flex-col gap-2">
               {exp.bullets.map((bullet, bulletIdx) => (
@@ -127,14 +127,14 @@ export function ExperienceForm({
               className="mt-1.5 self-start"
             >
               <PlusIcon className="mr-1.5 size-3.5" />
-              Add Bullet Point
+              Tambah Poin
             </Button>
           </div>
         </div>
       ))}
       {experiences.length === 0 && (
         <span className="text-sm text-muted-foreground text-center mb-4">
-          No experience entries found.
+          Belum ada data pengalaman.
         </span>
       )}
       <Button
@@ -143,7 +143,7 @@ export function ExperienceForm({
         onClick={addExperience}
       >
         <PlusIcon className="mr-2 size-4" />
-        Add Experience Entry
+        Tambah Pengalaman
       </Button>
     </div>
   );

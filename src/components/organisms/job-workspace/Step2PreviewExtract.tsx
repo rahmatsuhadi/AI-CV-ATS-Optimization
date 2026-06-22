@@ -11,6 +11,7 @@ import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Step2PreviewExtractProps {
   companyName: string;
@@ -145,9 +146,9 @@ export function Step2PreviewExtract({
           <div className="flex flex-col gap-1.5 md:col-span-2">
             <Label
               htmlFor="salaryRange"
-              className="font-semibold text-xs text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"
+              className="font-semibold text-xs text-muted-foreground uppercase tracking-wider"
             >
-              Estimasi / Range Gaji <span className="text-[10px] text-primary/80 normal-case font-medium">(AI extracted)</span>
+              Estimasi / Range Gaji
             </Label>
             <div className="relative">
               <CoinsIcon className="absolute left-3.5 top-3 size-4 text-muted-foreground" />
@@ -160,7 +161,8 @@ export function Step2PreviewExtract({
               />
             </div>
             <p className="text-[10.5px] text-muted-foreground leading-normal mt-0.5">
-              * Info estimasi gaji dideteksi secara otomatis dari deskripsi lowongan kerja. Input dikunci untuk menjaga integritas data lowongan asli.
+              * Info estimasi gaji dideteksi secara otomatis dari deskripsi
+              lowongan. Input dikunci untuk menjaga integritas data.
             </p>
           </div>
         </div>
@@ -175,15 +177,60 @@ export function Step2PreviewExtract({
               <div className="text-[13px] leading-relaxed text-foreground space-y-1">
                 <ReactMarkdown
                   components={{
-                    h1: ({ ...props }) => <h1 className="text-base font-heading font-bold mt-5 mb-2 text-foreground border-b border-border/20 pb-1" {...props} />,
-                    h2: ({ ...props }) => <h2 className="text-sm font-heading font-bold mt-4 mb-1.5 text-foreground" {...props} />,
-                    h3: ({ ...props }) => <h3 className="text-xs font-heading font-bold uppercase tracking-wider mt-3 mb-1 text-primary/95" {...props} />,
-                    p: ({ ...props }) => <p className="text-[13px] leading-relaxed text-muted-foreground my-1.5" {...props} />,
-                    ul: ({ ...props }) => <ul className="list-disc pl-5 my-2 space-y-1 text-muted-foreground" {...props} />,
-                    ol: ({ ...props }) => <ol className="list-decimal pl-5 my-2 space-y-1 text-muted-foreground" {...props} />,
-                    li: ({ ...props }) => <li className="text-[13px] leading-relaxed text-foreground/90 pl-0.5" {...props} />,
-                    strong: ({ ...props }) => <strong className="font-semibold text-foreground" {...props} />,
-                    em: ({ ...props }) => <em className="italic text-muted-foreground/90" {...props} />,
+                    h1: ({ ...props }) => (
+                      <h1
+                        className="text-base font-heading font-bold mt-5 mb-2 text-foreground border-b border-border/20 pb-1"
+                        {...props}
+                      />
+                    ),
+                    h2: ({ ...props }) => (
+                      <h2
+                        className="text-sm font-heading font-bold mt-4 mb-1.5 text-foreground"
+                        {...props}
+                      />
+                    ),
+                    h3: ({ ...props }) => (
+                      <h3
+                        className="text-xs font-heading font-bold uppercase tracking-wider mt-3 mb-1 text-primary/95"
+                        {...props}
+                      />
+                    ),
+                    p: ({ ...props }) => (
+                      <p
+                        className="text-[13px] leading-relaxed text-muted-foreground my-1.5"
+                        {...props}
+                      />
+                    ),
+                    ul: ({ ...props }) => (
+                      <ul
+                        className="list-disc pl-5 my-2 space-y-1 text-muted-foreground"
+                        {...props}
+                      />
+                    ),
+                    ol: ({ ...props }) => (
+                      <ol
+                        className="list-decimal pl-5 my-2 space-y-1 text-muted-foreground"
+                        {...props}
+                      />
+                    ),
+                    li: ({ ...props }) => (
+                      <li
+                        className="text-[13px] leading-relaxed text-foreground/90 pl-0.5"
+                        {...props}
+                      />
+                    ),
+                    strong: ({ ...props }) => (
+                      <strong
+                        className="font-semibold text-foreground"
+                        {...props}
+                      />
+                    ),
+                    em: ({ ...props }) => (
+                      <em
+                        className="italic text-muted-foreground/90"
+                        {...props}
+                      />
+                    ),
                   }}
                 >
                   {requirements[0]}
@@ -197,14 +244,16 @@ export function Step2PreviewExtract({
           ) : (
             <div className="flex flex-col gap-2">
               <p className="text-xs text-muted-foreground">
-                Teks hasil ekstraksi AI di bawah disajikan dalam format Markdown. Silakan sunting secara fleksibel (tambahkan responsibilities, kualifikasi, atau info benefit).
+                Teks hasil ekstraksi di bawah disajikan dalam format Markdown.
+                Silakan sunting jika ada kekeliruan (tambahkan responsibilities,
+                kualifikasi, atau info benefit).
               </p>
-              <textarea
+              <Textarea
                 value={requirements[0] || ""}
                 onChange={(e) => setRequirements?.([e.target.value])}
                 rows={12}
-                className="font-mono text-sm leading-relaxed rounded-xl bg-background border border-border/80 p-4 w-full focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-foreground"
-                placeholder="### Responsibilities&#10;- Develop server-side...&#10;&#10;### Requirements&#10;- Bachelor's degree..."
+                className="font-mono text-sm leading-relaxed rounded-xl"
+                placeholder={`### Responsibilities\n- Develop server-side...\n\n### Requirements\n- Bachelor's degree...`}
               />
             </div>
           )}
@@ -232,7 +281,7 @@ export function Step2PreviewExtract({
                 </>
               ) : (
                 <>
-                  Simpan ke Supabase <SaveIcon className="ml-2 size-4" />
+                  Simpan & Lanjutkan <SaveIcon className="ml-2 size-4" />
                 </>
               )}
             </Button>

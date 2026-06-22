@@ -148,7 +148,7 @@ export function useJobWorkspace(initialJob: JobData) {
     const toastId = toast.loading(
       "Menghubungkan Base CV & menghitung kecocokan via AI...",
     );
- 
+
     try {
       const res = await getBaseCV();
       if (res.success && res.data) {
@@ -156,13 +156,13 @@ export function useJobWorkspace(initialJob: JobData) {
         setBaseCv(cv);
         setCvName(cv.name || "Base CV");
         setCvIsBase(cv.is_base || false);
- 
+
         const parsedData = parseCvStructuredJson(cv.structured_json);
         setPersonal(parsedData.personal);
         setExperiences(parsedData.experiences);
         setEducations(parsedData.educations);
         setSkillsAchievements(parsedData.skillsAchievements);
- 
+
         // Panggil Server Action AI untuk membandingkan CV & Lowongan
         const matchRes = await analyzeCvMatch(
           companyName,
@@ -171,9 +171,9 @@ export function useJobWorkspace(initialJob: JobData) {
           requirements,
           parsedData,
         );
- 
+
         toast.dismiss(toastId);
- 
+
         if (matchRes.success && matchRes.data) {
           const score = matchRes.data.matchScore ?? 0;
           const matched = matchRes.data.matchedKeywords ?? [];
@@ -419,7 +419,7 @@ export function useJobWorkspace(initialJob: JobData) {
 
       if (res.success) {
         toast.success("CV berhasil diselaraskan dan disimpan ke database!");
-        
+
         // Re-calculate matching with ParsedCvData layout using AI
         const matchingInput: ParsedCvData = {
           personal,
@@ -429,7 +429,7 @@ export function useJobWorkspace(initialJob: JobData) {
             (item) => item.category.trim() || item.description.trim(),
           ),
         };
-        
+
         const matchRes = await analyzeCvMatch(
           companyName,
           position,

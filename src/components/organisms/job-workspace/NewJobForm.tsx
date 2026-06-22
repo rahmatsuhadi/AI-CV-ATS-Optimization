@@ -36,7 +36,7 @@ export function NewJobForm() {
     }
 
     setExtracting(true);
-    const toastId = toast.loading("AI sedang mengekstrak rincian lowongan...");
+    const toastId = toast.loading("Mengekstrak rincian lowongan...");
 
     try {
       const res = await extractJobDetails(rawText);
@@ -52,14 +52,14 @@ export function NewJobForm() {
 
         setMaxStep(2);
         setStep(2);
-        toast.success("Rincian lowongan kerja berhasil diekstrak oleh AI!");
+        toast.success("Rincian lowongan kerja berhasil diekstrak!");
       } else {
         toast.error(res.error || "Gagal mengekstrak detail lowongan.");
       }
     } catch (err) {
       console.error(err);
       toast.dismiss(toastId);
-      toast.error("Terjadi kesalahan saat menghubungi AI.");
+      toast.error("Terjadi kesalahan saat mengekstrak data.");
     } finally {
       setExtracting(false);
     }
@@ -73,7 +73,7 @@ export function NewJobForm() {
     }
 
     setSaving(true);
-    const toastId = toast.loading("Menyimpan rincian pekerjaan ke Supabase...");
+    const toastId = toast.loading("Menyimpan rincian pekerjaan...");
 
     try {
       const res = await createJob({
@@ -104,10 +104,10 @@ export function NewJobForm() {
   };
 
   const steps = [
-    { number: 1, label: "1: Input Plan" },
-    { number: 2, label: "2: Preview Extract" },
-    { number: 3, label: "3: CV Tailor & Match" },
-    { number: 4, label: "4: Email Application" },
+    { number: 1, label: "1: Input Lowongan" },
+    { number: 2, label: "2: Pratinjau Ekstrak" },
+    { number: 3, label: "3: Sesuaikan CV" },
+    { number: 4, label: "4: Kirim Email" },
   ];
 
   return (
@@ -117,8 +117,8 @@ export function NewJobForm() {
           Job Workspace
         </h1>
         <p className="text-sm text-muted-foreground">
-          Kelola plan pekerjaan, analisis kualifikasi, sesuaikan lamaran
-          dengan CV, dan generate email pengantar.
+          Kelola plan pekerjaan, analisis kualifikasi, sesuaikan lamaran dengan
+          CV, dan generate email pengantar.
         </p>
       </div>
 
