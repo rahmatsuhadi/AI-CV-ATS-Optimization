@@ -8,14 +8,6 @@
 
 A web-based system designed to streamline the job application process. It converts resumes (CVs) into structured JSON, parses job listings, computes ATS compatibility scores, and provides interactive, in-place CV tailoring alongside automated cover letter generation.
 
-## Preview
-
-<p align="center">
-  <img src="public/screenshot/1.png" width="32%" />
-  <img src="public/screenshot/2.png" width="32%" />
-  <img src="public/screenshot/3.png" width="32%" />
-</p>
-
 ## Key Capabilities
 
 * **CV PDF Parsing**: Extracts text content from PDF uploads and uses AI to map details into a structured, unified JSON schema (personal info, experiences, education, and skills/achievements).
