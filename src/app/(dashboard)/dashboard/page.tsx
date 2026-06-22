@@ -1,5 +1,3 @@
-"use client";
-
 import {
   BarChartIcon,
   BriefcaseIcon,
@@ -7,21 +5,35 @@ import {
   SendIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { getBaseCV, getCVs } from "@/actions/cv";
 import { SectionHeader } from "@/components/atoms/SectionHeader";
 import { CvCard } from "@/components/molecules/CvCard";
 import { JobRow } from "@/components/molecules/JobRow";
 import { StatCard } from "@/components/molecules/StatCard";
 import { Button } from "@/components/ui/button";
 
-export default function DashboardPage() {
-  const hasBaseCv = true; // Temporary mock until we fetch DB state in Server Component
+interface DashboardCv {
+  id: string;
+  name: string;
+  is_base: boolean;
+  updated_at: string;
+}
+
+export default async function DashboardPage() {
+  const baseCvRes = await getBaseCV();
+  const cvsRes = await getCVs();
+
+  const baseCv = baseCvRes.success ? baseCvRes.data : null;
+  const rawCvs = cvsRes.success && cvsRes.data ? cvsRes.data : [];
+  const cvs = rawCvs as DashboardCv[];
+  const hasBaseCv = !!baseCv;
 
   const MOCK_STATS = [
     {
       label: "Total CVs",
-      value: hasBaseCv ? 2 : 0,
+      value: cvs.length,
       icon: FileTextIcon,
-      trend: hasBaseCv ? "+1 this week" : undefined,
+      trend: cvs.length > 0 ? `+${cvs.length} total` : undefined,
     },
     {
       label: "Jobs Applied",
@@ -43,22 +55,21 @@ export default function DashboardPage() {
     },
   ];
 
-  const MOCK_CVS = hasBaseCv
-    ? [
-        {
-          id: "1",
-          name: "Software Engineer (General)",
-          score: undefined,
-          updatedAt: "Updated 2 days ago",
-        },
-        {
-          id: "2",
-          name: "Backend Developer Profile",
-          score: undefined,
-          updatedAt: "Updated 1 week ago",
-        },
-      ]
-    : [];
+  const formattedCvs = cvs.map((cv) => {
+    // Format tanggal update secara manusiawi
+    const date = new Date(cv.updated_at);
+    const timeDiff = Math.abs(Date.now() - date.getTime());
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const formattedDate =
+      diffDays <= 1 ? "Updated recently" : `Updated ${diffDays} days ago`;
+
+    return {
+      id: cv.id,
+      name: cv.name + (cv.is_base ? " (Base)" : ""),
+      score: undefined, // base CV doesn't have a specific job matching score
+      updatedAt: formattedDate,
+    };
+  });
 
   const MOCK_JOBS = hasBaseCv
     ? [
@@ -104,17 +115,17 @@ export default function DashboardPage() {
             title="My CV Profiles"
             subtitle="Manage and tailor versions"
           />
-          {MOCK_CVS.length > 0 ? (
+          {formattedCvs.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {MOCK_CVS.map((cv) => (
-                <CvCard key={cv.name} {...cv} />
+              {formattedCvs.map((cv) => (
+                <CvCard key={cv.id} {...cv} />
               ))}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-muted/20 p-8 text-center">
               <p className="text-sm font-medium">No CV found</p>
               <Button size="sm" variant="outline" className="mt-4" asChild>
-                <Link href="/cv">Upload Base CV</Link>
+                <Link href="/cv">Upload or Build CV</Link>
               </Button>
             </div>
           )}
