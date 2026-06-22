@@ -13,7 +13,7 @@ export function AppShell({ children, userEmail }: AppShellProps) {
       <div className="flex flex-1 flex-col pl-[240px]">
         <Topbar userEmail={userEmail} />
         <main className="flex-1 p-8">
-          <div className="mx-auto max-w-5xl">{children}</div>
+          <div className="mx-auto max-w-7xl">{children}</div>
         </main>
       </div>
     </div>

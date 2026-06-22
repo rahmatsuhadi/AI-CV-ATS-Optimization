@@ -3,6 +3,8 @@
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
+import { updateJob } from "@/actions/job";
 import { StatusBadge } from "@/components/atoms/StatusBadge";
 import {
   Select,
@@ -33,6 +35,26 @@ export function JobRow({
   className,
 }: JobRowProps) {
   const [status, setStatus] = useState<JobStatus>(initialStatus);
+
+  const handleStatusChange = async (newStatus: JobStatus) => {
+    setStatus(newStatus);
+    const toastId = toast.loading(`Mengubah status lamaran menjadi ${newStatus}...`);
+    try {
+      const res = await updateJob(id, { status: newStatus });
+      toast.dismiss(toastId);
+      if (res.success) {
+        toast.success(`Status lamaran ${company} berhasil diubah ke ${newStatus}!`);
+      } else {
+        toast.error(res.error || "Gagal memperbarui status.");
+        setStatus(initialStatus);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.dismiss(toastId);
+      toast.error("Terjadi kesalahan saat memperbarui status.");
+      setStatus(initialStatus);
+    }
+  };
 
   return (
     <div
@@ -65,7 +87,7 @@ export function JobRow({
 
         <Select
           value={status}
-          onValueChange={(val: JobStatus) => setStatus(val)}
+          onValueChange={handleStatusChange}
         >
           <SelectTrigger className="h-8 w-[120px] rounded-lg text-xs shadow-none border-border/60 focus:ring-0 focus:ring-offset-0">
             <SelectValue>

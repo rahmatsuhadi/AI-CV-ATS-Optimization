@@ -1,47 +1,10 @@
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { getJobs } from "@/actions/job";
 import { SectionHeader } from "@/components/atoms/SectionHeader";
 import { StatusBadge } from "@/components/atoms/StatusBadge";
 import { JobRow } from "@/components/molecules/JobRow";
 import { Button } from "@/components/ui/button";
-
-const MOCK_JOBS = [
-  {
-    id: "1",
-    company: "Tokopedia",
-    position: "Senior Frontend Engineer",
-    status: "interview" as const,
-    appliedAt: "Jun 15, 2025",
-  },
-  {
-    id: "2",
-    company: "Gojek",
-    position: "Software Engineer",
-    status: "applied" as const,
-    appliedAt: "Jun 12, 2025",
-  },
-  {
-    id: "3",
-    company: "Traveloka",
-    position: "Full Stack Developer",
-    status: "rejected" as const,
-    appliedAt: "Jun 8, 2025",
-  },
-  {
-    id: "4",
-    company: "Shopee",
-    position: "React Developer",
-    status: "offer" as const,
-    appliedAt: "Jun 3, 2025",
-  },
-  {
-    id: "5",
-    company: "Bukalapak",
-    position: "Frontend Engineer",
-    status: "draft" as const,
-    appliedAt: "Jun 1, 2025",
-  },
-];
 
 const statuses = [
   "draft",
@@ -51,14 +14,28 @@ const statuses = [
   "rejected",
 ] as const;
 
-export default function JobPage() {
+export default async function JobPage() {
+  const res = await getJobs();
+  const jobs = res.success && res.data ? res.data : [];
+
+  // Helper untuk memformat tanggal database ke format lokal yang manis
+  const formatDate = (dateStr?: string | null) => {
+    if (!dateStr) return "-";
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
     <div className="flex flex-col gap-8">
       <SectionHeader
         title="Job Tracker"
-        subtitle="Manage your application pipeline and follow-ups."
+        subtitle="Kelola pipeline lamaran kerja dan tindak lanjut (CRM Karir)."
         action={
-          <Button size="sm" className="rounded-xl shadow-md" asChild>
+          <Button size="sm" className="rounded-xl shadow-md font-semibold bg-primary hover:bg-primary/95 text-primary-foreground" asChild>
             <Link href="/job/new">
               <PlusIcon className="mr-2 size-4" />
               Add Application
@@ -68,24 +45,49 @@ export default function JobPage() {
       />
 
       <div className="flex flex-col gap-6">
+        {/* Status filters */}
         <div className="flex flex-wrap gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2">
           <span className="flex items-center px-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Filter:
+            Pipeline:
           </span>
           {statuses.map((s) => (
             <div
               key={s}
-              className="cursor-pointer hover:opacity-80 transition-opacity"
+              className="opacity-90 hover:opacity-100 transition-opacity cursor-default"
             >
-              <StatusBadge status={s} className="px-3 py-1" />
+              <StatusBadge status={s} className="px-3 py-1 font-semibold" />
             </div>
           ))}
         </div>
 
+        {/* Jobs list */}
         <div className="flex flex-col gap-3">
-          {MOCK_JOBS.map((job) => (
-            <JobRow key={job.company + job.position} {...job} />
-          ))}
+          {jobs.length > 0 ? (
+            jobs.map((job) => (
+              <JobRow
+                key={job.id}
+                id={job.id}
+                company={job.company_name}
+                position={job.position}
+                status={job.status}
+                appliedAt={formatDate(job.applied_at || (job as any).created_at)}
+              />
+            ))
+          ) : (
+            <div className="text-center p-16 border border-dashed border-border/80 rounded-2xl bg-muted/5 flex flex-col gap-4 items-center justify-center min-h-[220px]">
+              <div className="flex flex-col gap-1.5 max-w-sm">
+                <p className="text-sm font-semibold text-foreground">Belum ada lamaran pekerjaan</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Ekstrak informasi lowongan kerja pertamamu dan track kualifikasinya bersama AI di sini.
+                </p>
+              </div>
+              <Button size="sm" className="rounded-xl font-semibold mt-2 bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm" asChild>
+                <Link href="/job/new">
+                  <PlusIcon className="mr-1.5 size-4" /> Tambah Lamaran Baru
+                </Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
